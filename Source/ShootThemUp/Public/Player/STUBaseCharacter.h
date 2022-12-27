@@ -31,6 +31,10 @@ protected:
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
     class UInputAction* JumpAction;
 
+    /** Jump Input Action */
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+    class UInputAction* RunAction;
+
     /** Move Input Action */
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
     class UInputAction* MoveAction;
@@ -38,6 +42,9 @@ protected:
     /** Look Input Action */
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
     class UInputAction* LookAction;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Speed", meta = (ClampMin = "1.5", ClampMax = "10.0"))
+    float RunSpeedModifier = 2.0f;
 
     // Called when the game starts or when spawned
     virtual void BeginPlay() override;
@@ -48,10 +55,21 @@ protected:
     /** Called for looking input */
     void Look(const FInputActionValue& Value);
 
+    void Run();
+    void StopRunning();
+
+    UFUNCTION(BlueprintCallable)
+    bool IsRunning() const;
+
 public:
     // Called every frame
     virtual void Tick(float DeltaTime) override;
 
     // Called to bind functionality to input
     virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+private:
+    float DefaultWalkSpeed;
+    bool WantsToRun = false;
+    bool IsMovingForward = false;
 };

@@ -26,7 +26,7 @@ ASTUBaseCharacter::ASTUBaseCharacter()
 
     // Don't rotate when the controller rotates. Let that just affect the camera.
     bUseControllerRotationPitch = false;
-    bUseControllerRotationYaw = false;
+    bUseControllerRotationYaw = true;
     bUseControllerRotationRoll = false;
 
     // Configure character movement
@@ -48,6 +48,8 @@ void ASTUBaseCharacter::BeginPlay()
             Subsystem->AddMappingContext(DefaultMappingContext, 0);
         }
     }
+
+    DefaultWalkSpeed = GetCharacterMovement()->MaxWalkSpeed;
 }
 
 // Called every frame
@@ -73,6 +75,10 @@ void ASTUBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 
         // Looking
         EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ASTUBaseCharacter::Look);
+
+        // Running
+        EnhancedInputComponent->BindAction(RunAction, ETriggerEvent::Triggered, this, &ASTUBaseCharacter::Run);
+        EnhancedInputComponent->BindAction(RunAction, ETriggerEvent::Completed, this, &ASTUBaseCharacter::StopRunning);
     }
 }
 
@@ -82,6 +88,8 @@ void ASTUBaseCharacter::Move(const FInputActionValue& Value)
 
     if (Controller != nullptr)
     {
+        IsMovingForward = MovementVector.Y > 0.0;
+
         // find out which way is forward
         const FRotator Rotation = Controller->GetControlRotation();
         const FRotator YawRotation(0, Rotation.Yaw, 0);
@@ -107,4 +115,27 @@ void ASTUBaseCharacter::Look(const FInputActionValue& Value)
         AddControllerYawInput(LookAxisVector.X);
         AddControllerPitchInput(LookAxisVector.Y);
     }
+}
+
+void ASTUBaseCharacter::Run()
+{
+    if (UCharacterMovementComponent* MovementComponent = GetCharacterMovement())
+    {
+        WantsToRun = true;
+        MovementComponent->MaxWalkSpeed = IsMovingForward ? DefaultWalkSpeed * RunSpeedModifier : DefaultWalkSpeed;
+    }
+}
+
+void ASTUBaseCharacter::StopRunning()
+{
+    if (UCharacterMovementComponent* MovementComponent = GetCharacterMovement())
+    {
+        WantsToRun = false;
+        MovementComponent->MaxWalkSpeed = DefaultWalkSpeed;
+    }
+}
+
+bool ASTUBaseCharacter::IsRunning() const
+{
+    return WantsToRun && IsMovingForward && !GetVelocity().IsZero();
 }
