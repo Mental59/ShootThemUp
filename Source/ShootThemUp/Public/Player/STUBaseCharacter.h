@@ -46,6 +46,9 @@ protected:
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Speed", meta = (ClampMin = "1.5", ClampMax = "10.0"))
     float RunSpeedModifier = 2.0f;
 
+    UPROPERTY(BlueprintReadWrite)
+    bool CanMove = true;
+
     // Called when the game starts or when spawned
     virtual void BeginPlay() override;
 

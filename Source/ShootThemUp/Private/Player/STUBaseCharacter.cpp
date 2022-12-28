@@ -84,6 +84,8 @@ void ASTUBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 
 void ASTUBaseCharacter::Move(const FInputActionValue& Value)
 {
+    if (!CanMove) return;
+
     FVector2D MovementVector = Value.Get<FVector2D>();
 
     if (Controller != nullptr)
