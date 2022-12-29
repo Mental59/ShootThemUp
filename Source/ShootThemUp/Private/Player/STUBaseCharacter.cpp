@@ -9,6 +9,8 @@
 #include "GameFramework/Controller.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "Components/STUHealthComponent.h"
+#include "Components/TextRenderComponent.h"
 
 // Sets default values
 ASTUBaseCharacter::ASTUBaseCharacter()
@@ -24,6 +26,11 @@ ASTUBaseCharacter::ASTUBaseCharacter()
     CameraComponent->SetupAttachment(SpringArmComponent);
     CameraComponent->bUsePawnControlRotation = false;
 
+    HealthComponent = CreateDefaultSubobject<USTUHealthComponent>("HealthComponent");
+
+    HealthTextComponent = CreateDefaultSubobject<UTextRenderComponent>("HealthTextComponent");
+    HealthTextComponent->SetupAttachment(GetRootComponent());
+
     // Don't rotate when the controller rotates. Let that just affect the camera.
     bUseControllerRotationPitch = false;
     bUseControllerRotationYaw = true;
@@ -38,6 +45,9 @@ ASTUBaseCharacter::ASTUBaseCharacter()
 void ASTUBaseCharacter::BeginPlay()
 {
     Super::BeginPlay();
+
+    check(HealthComponent);
+    check(HealthTextComponent);
 
     // Add Input Mapping Context
     if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
@@ -56,6 +66,9 @@ void ASTUBaseCharacter::BeginPlay()
 void ASTUBaseCharacter::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
+
+    const float Health = HealthComponent->GetHealth();
+    HealthTextComponent->SetText(FText::FromString(FString::Printf(TEXT("%.0f"), Health)));
 }
 
 // Called to bind functionality to input
@@ -90,7 +103,7 @@ void ASTUBaseCharacter::Move(const FInputActionValue& Value)
 
     if (Controller != nullptr)
     {
-        IsMovingForward = MovementVector.Y > 0.0;
+        IsMovingForward = MovementVector.Y > 0.0 && MovementVector.X == 0.0;
 
         // find out which way is forward
         const FRotator Rotation = Controller->GetControlRotation();
