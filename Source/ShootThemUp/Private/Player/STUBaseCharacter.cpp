@@ -12,10 +12,10 @@
 #include "Components/STUHealthComponent.h"
 #include "Components/TextRenderComponent.h"
 
-// Sets default values
+DEFINE_LOG_CATEGORY_STATIC(LogBaseCharacter, All, All);
+
 ASTUBaseCharacter::ASTUBaseCharacter()
 {
-    // Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
     PrimaryActorTick.bCanEverTick = true;
 
     SpringArmComponent = CreateDefaultSubobject<USpringArmComponent>("SpringArmComponent");
@@ -31,25 +31,22 @@ ASTUBaseCharacter::ASTUBaseCharacter()
     HealthTextComponent = CreateDefaultSubobject<UTextRenderComponent>("HealthTextComponent");
     HealthTextComponent->SetupAttachment(GetRootComponent());
 
-    // Don't rotate when the controller rotates. Let that just affect the camera.
     bUseControllerRotationPitch = false;
     bUseControllerRotationYaw = true;
     bUseControllerRotationRoll = false;
 
-    // Configure character movement
-    GetCharacterMovement()->bOrientRotationToMovement = true;             // Character moves in the direction of input...
-    GetCharacterMovement()->RotationRate = FRotator(0.0f, 500.0f, 0.0f);  // ...at this rotation rate
+    GetCharacterMovement()->bOrientRotationToMovement = false;
+    GetCharacterMovement()->RotationRate = FRotator(0.0f, 500.0f, 0.0f);
 }
 
-// Called when the game starts or when spawned
 void ASTUBaseCharacter::BeginPlay()
 {
     Super::BeginPlay();
 
     check(HealthComponent);
     check(HealthTextComponent);
+    check(GetCharacterMovement());
 
-    // Add Input Mapping Context
     if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
     {
         if (UEnhancedInputLocalPlayerSubsystem* Subsystem =
@@ -60,36 +57,32 @@ void ASTUBaseCharacter::BeginPlay()
     }
 
     DefaultWalkSpeed = GetCharacterMovement()->MaxWalkSpeed;
+    OnHealthChanged(HealthComponent->GetHealth());
+    HealthComponent->OnDeath.AddUObject(this, &ASTUBaseCharacter::OnDeath);
+    HealthComponent->OnHealthChanged.AddUObject(this, &ASTUBaseCharacter::OnHealthChanged);
+
+    LandedDelegate.AddDynamic(this, &ASTUBaseCharacter::OnGroundLanded);
 }
 
-// Called every frame
 void ASTUBaseCharacter::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
-
-    const float Health = HealthComponent->GetHealth();
-    HealthTextComponent->SetText(FText::FromString(FString::Printf(TEXT("%.0f"), Health)));
 }
 
-// Called to bind functionality to input
 void ASTUBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
     Super::SetupPlayerInputComponent(PlayerInputComponent);
+    check(PlayerInputComponent);
 
-    // Set up action bindings
     if (UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent))
     {
-        // Jumping
         EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &ACharacter::Jump);
         EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
 
-        // Moving
         EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ASTUBaseCharacter::Move);
 
-        // Looking
         EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ASTUBaseCharacter::Look);
 
-        // Running
         EnhancedInputComponent->BindAction(RunAction, ETriggerEvent::Triggered, this, &ASTUBaseCharacter::Run);
         EnhancedInputComponent->BindAction(RunAction, ETriggerEvent::Completed, this, &ASTUBaseCharacter::StopRunning);
     }
@@ -103,19 +96,15 @@ void ASTUBaseCharacter::Move(const FInputActionValue& Value)
 
     if (Controller != nullptr)
     {
-        IsMovingForward = MovementVector.Y > 0.0 && MovementVector.X == 0.0;
+        IsMovingForward = MovementVector.Y > 0.0 && FMath::IsNearlyZero(MovementVector.X);
 
-        // find out which way is forward
         const FRotator Rotation = Controller->GetControlRotation();
         const FRotator YawRotation(0, Rotation.Yaw, 0);
 
-        // get forward vector
         const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
 
-        // get right vector
         const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 
-        // add movement
         AddMovementInput(ForwardDirection, MovementVector.Y);
         AddMovementInput(RightDirection, MovementVector.X);
     }
@@ -153,4 +142,36 @@ void ASTUBaseCharacter::StopRunning()
 bool ASTUBaseCharacter::IsRunning() const
 {
     return WantsToRun && IsMovingForward && !GetVelocity().IsZero();
+}
+
+void ASTUBaseCharacter::OnDeath()
+{
+    UE_LOG(LogBaseCharacter, Display, TEXT("Player %s is dead"), *GetName());
+
+    PlayAnimMontage(DeathAnimMontage);
+    GetCharacterMovement()->DisableMovement();
+    SetLifeSpan(LifeSpanOnDeath);
+
+    if (Controller)
+    {
+        Controller->ChangeState(NAME_Spectating);
+    }
+}
+
+void ASTUBaseCharacter::OnHealthChanged(float Health)
+{
+    HealthTextComponent->SetText(FText::FromString(FString::Printf(TEXT("%.0f"), Health)));
+}
+
+void ASTUBaseCharacter::OnGroundLanded(const FHitResult& Hit)
+{
+    const double FallVelocityZ = -GetVelocity().Z;
+    UE_LOG(LogBaseCharacter, Display, TEXT("On landed: %f"), FallVelocityZ);
+
+    if (FallVelocityZ < LandedDamageVelocity.X) return;
+
+    const double FinalDamage = FMath::GetMappedRangeValueClamped(LandedDamageVelocity, LandedDamage, FallVelocityZ);
+    TakeDamage(FinalDamage, FDamageEvent{}, nullptr, nullptr);
+
+    UE_LOG(LogBaseCharacter, Display, TEXT("Final Damage: %f"), FinalDamage);
 }

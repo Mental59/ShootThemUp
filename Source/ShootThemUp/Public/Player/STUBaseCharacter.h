@@ -13,7 +13,6 @@ class SHOOTTHEMUP_API ASTUBaseCharacter : public ACharacter
     GENERATED_BODY()
 
 public:
-    // Sets default values for this character's properties
     ASTUBaseCharacter();
 
 protected:
@@ -29,56 +28,67 @@ protected:
     UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
     class UTextRenderComponent* HealthTextComponent;
 
-    /** MappingContext */
+    UPROPERTY(EditDefaultsOnly, Category = "Animation")
+    class UAnimMontage* DeathAnimMontage;
+
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
     class UInputMappingContext* DefaultMappingContext;
 
-    /** Jump Input Action */
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
     class UInputAction* JumpAction;
 
-    /** Jump Input Action */
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
     class UInputAction* RunAction;
 
-    /** Move Input Action */
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
     class UInputAction* MoveAction;
 
-    /** Look Input Action */
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
     class UInputAction* LookAction;
 
-    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Speed", meta = (ClampMin = "1.5", ClampMax = "10.0"))
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Movement", meta = (ClampMin = "1.5", ClampMax = "10.0"))
     float RunSpeedModifier = 2.0f;
 
-    UPROPERTY(BlueprintReadWrite)
+    UPROPERTY(EditDefaultsOnly, Category = "Damage")
+    FVector2D LandedDamageVelocity = FVector2D(900.0f, 1200.0f);
+
+    UPROPERTY(EditDefaultsOnly, Category = "Damage")
+    FVector2D LandedDamage = FVector2D(10.0f, 100.0f);
+
+    UPROPERTY(EditDefaultsOnly, Category = "Damage")
+    float LifeSpanOnDeath = 5.0f;
+
+    UPROPERTY(BlueprintReadWrite, Category = "Movement")
     bool CanMove = true;
 
-    // Called when the game starts or when spawned
+    UFUNCTION(BlueprintCallable, Category = "Movement")
+    bool IsRunning() const;
+
     virtual void BeginPlay() override;
 
-    /** Called for movement input */
     void Move(const FInputActionValue& Value);
 
-    /** Called for looking input */
     void Look(const FInputActionValue& Value);
 
     void Run();
     void StopRunning();
 
-    UFUNCTION(BlueprintCallable)
-    bool IsRunning() const;
-
 public:
-    // Called every frame
     virtual void Tick(float DeltaTime) override;
 
-    // Called to bind functionality to input
     virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 private:
+    UFUNCTION()
+    void OnGroundLanded(const FHitResult& Hit);
+
     float DefaultWalkSpeed;
+
     bool WantsToRun = false;
+
     bool IsMovingForward = false;
+
+    void OnDeath();
+
+    void OnHealthChanged(float Health);
 };
