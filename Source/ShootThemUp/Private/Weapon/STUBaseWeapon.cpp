@@ -23,30 +23,11 @@ void ASTUBaseWeapon::BeginPlay()
     check(WeaponMesh);
 }
 
-void ASTUBaseWeapon::StartFire()
-{
-    MakeShot();
-    GetWorldTimerManager().SetTimer(ShootTimerHandle, this, &ASTUBaseWeapon::MakeShot, FireRate, true);
-}
+void ASTUBaseWeapon::StartFire() {}
 
-void ASTUBaseWeapon::StopFire()
-{
-    GetWorldTimerManager().ClearTimer(ShootTimerHandle);
-}
+void ASTUBaseWeapon::StopFire() {}
 
-void ASTUBaseWeapon::MakeShot()
-{
-    if (!GetWorld()) return;
-
-    FVector CameraTraceStart, CameraTraceEnd;
-    if (!GetCameraTraceData(CameraTraceStart, CameraTraceEnd)) return;
-
-    FHitResult HitResult;
-    LineTrace(HitResult, CameraTraceStart, CameraTraceEnd);
-
-    MakeDamageToActor(HitResult);
-    DrawDebugGeometry(HitResult);
-}
+void ASTUBaseWeapon::MakeShot() {}
 
 void ASTUBaseWeapon::LineTrace(FHitResult& HitResult, const FVector& TraceStart, const FVector& TraceEnd)
 {
@@ -83,7 +64,7 @@ bool ASTUBaseWeapon::GetCameraTraceData(FVector& TraceStart, FVector& TraceEnd) 
     Controller->GetPlayerViewPoint(ViewLocation, ViewRotation);
 
     TraceStart = ViewLocation;
-    const FVector ShootDirection = FMath::VRandCone(ViewRotation.Vector(), FMath::DegreesToRadians(FireSpread));
+    const FVector ShootDirection = ViewRotation.Vector();
     TraceEnd = TraceStart + ShootDirection * TraceMaxDistance;
 
     return true;

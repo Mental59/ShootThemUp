@@ -91,7 +91,7 @@ void ASTUBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 
         EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ASTUBaseCharacter::Look);
 
-        EnhancedInputComponent->BindAction(RunAction, ETriggerEvent::Started, this, &ASTUBaseCharacter::Run);
+        EnhancedInputComponent->BindAction(RunAction, ETriggerEvent::Triggered, this, &ASTUBaseCharacter::Run);
         EnhancedInputComponent->BindAction(RunAction, ETriggerEvent::Completed, this, &ASTUBaseCharacter::StopRunning);
 
         EnhancedInputComponent->BindAction(ShootAction, ETriggerEvent::Started, WeaponComponent, &USTUWeaponComponent::StartFire);
