@@ -29,17 +29,26 @@ protected:
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Shooting", meta = (ClampMin = "0.0", ClampMax = "180.0"))
     float MaxAngleBetweenPlayerAndTrace = 100.0f;
 
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Shooting", meta = (ClampMin = "0.0"))
+    float DamageAmount = 10.0f;
+
     virtual void BeginPlay() override;
 
     void MakeShot();
 
-    void LineTrace(FHitResult& HitResult, const FVector& TraceStart, const FVector& TraceEnd, ACharacter* Player);
+    void LineTrace(FHitResult& HitResult, const FVector& TraceStart, const FVector& TraceEnd);
 
-    bool GetCameraTraceData(FVector& TraceStart, FVector& TraceEnd, ACharacter* Player);
+    bool GetCameraTraceData(FVector& TraceStart, FVector& TraceEnd) const;
 
-    float GetAngleBetweenPlayerAndTrace(const FVector& ImpactPoint, ACharacter* Player);
+    float GetAngleBetweenPlayerAndTrace(const FVector& ImpactPoint, const ACharacter* Player) const;
 
-    void DrawDebugGeometry(const FHitResult& HitResult);
+    void DrawDebugGeometry(const FHitResult& HitResult) const;
+
+    void MakeDamageToActor(const FHitResult& HitResult);
+
+    APlayerController* GetPlayerController() const;
+
+    ACharacter* GetPlayer() const;
 
     FVector GetMuzzleWorldLocation() const;
 };
