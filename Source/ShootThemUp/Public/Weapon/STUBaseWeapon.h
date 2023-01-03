@@ -20,5 +20,26 @@ protected:
     UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
     class USkeletalMeshComponent* WeaponMesh;
 
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+    FName MuzzleSocketName = "MuzzleSocket";
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "LineTrace", meta = (ClampMin = "0.0"))
+    float TraceMaxDistance = 1500.0f;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "LineTrace", meta = (ClampMin = "0.0", ClampMax = "180.0"))
+    float MaxAngleBetweenPlayerAndTrace = 100.0f;
+
     virtual void BeginPlay() override;
+
+    void MakeShot();
+
+    void LineTrace(FHitResult& HitResult, const FVector& TraceStart, const FVector& TraceEnd, ACharacter* Player);
+
+    bool GetCameraTraceData(FVector& TraceStart, FVector& TraceEnd, ACharacter* Player);
+
+    float GetAngleBetweenPlayerAndTrace(const FVector& ImpactPoint, ACharacter* Player);
+
+    void DrawDebugGeometry(const FHitResult& HitResult);
+
+    FVector GetMuzzleWorldLocation() const;
 };
