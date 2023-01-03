@@ -32,8 +32,16 @@ void USTUWeaponComponent::SpawnWeapon()
     CurrentWeapon->SetOwner(Character);
 }
 
-void USTUWeaponComponent::Fire()
+void USTUWeaponComponent::StartFire()
 {
     if (!CurrentWeapon) return;
-    CurrentWeapon->Fire();
+    UE_LOG(LogTemp, Display, TEXT("StartFire"));
+    CurrentWeapon->StartFire();
+}
+
+void USTUWeaponComponent::StopFire()
+{
+    if (!CurrentWeapon) return;
+    UE_LOG(LogTemp, Display, TEXT("StopFire"));
+    CurrentWeapon->StopFire();
 }

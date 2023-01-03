@@ -70,6 +70,9 @@ protected:
     UFUNCTION(BlueprintCallable, Category = "Movement")
     bool IsRunning() const;
 
+    UFUNCTION(BlueprintCallable, Category = "Aim")
+    FRotator GetAimOffsets() const;
+
     virtual void BeginPlay() override;
 
     void Move(const FInputActionValue& Value);

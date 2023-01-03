@@ -14,7 +14,8 @@ class SHOOTTHEMUP_API ASTUBaseWeapon : public AActor
 public:
     ASTUBaseWeapon();
 
-    virtual void Fire();
+    virtual void StartFire();
+    virtual void StopFire();
 
 protected:
     UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
@@ -31,6 +32,12 @@ protected:
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Shooting", meta = (ClampMin = "0.0"))
     float DamageAmount = 10.0f;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Shooting", meta = (ClampMin = "0.0"))
+    float FireRate = 0.1f;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Shooting", meta = (ClampMin = "0.0"))
+    float FireSpread = 1.5f;
 
     virtual void BeginPlay() override;
 
@@ -51,4 +58,7 @@ protected:
     ACharacter* GetPlayer() const;
 
     FVector GetMuzzleWorldLocation() const;
+
+private:
+    FTimerHandle ShootTimerHandle;
 };

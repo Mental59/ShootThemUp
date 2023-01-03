@@ -37,10 +37,11 @@ ASTUBaseCharacter::ASTUBaseCharacter()
     WeaponComponent = CreateDefaultSubobject<USTUWeaponComponent>("WeaponComponent");
 
     bUseControllerRotationPitch = false;
-    bUseControllerRotationYaw = true;
+    bUseControllerRotationYaw = false;
     bUseControllerRotationRoll = false;
 
     GetCharacterMovement()->bOrientRotationToMovement = false;
+    GetCharacterMovement()->bUseControllerDesiredRotation = true;
     GetCharacterMovement()->RotationRate = FRotator(0.0f, 500.0f, 0.0f);
 }
 
@@ -90,10 +91,11 @@ void ASTUBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 
         EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ASTUBaseCharacter::Look);
 
-        EnhancedInputComponent->BindAction(RunAction, ETriggerEvent::Triggered, this, &ASTUBaseCharacter::Run);
+        EnhancedInputComponent->BindAction(RunAction, ETriggerEvent::Started, this, &ASTUBaseCharacter::Run);
         EnhancedInputComponent->BindAction(RunAction, ETriggerEvent::Completed, this, &ASTUBaseCharacter::StopRunning);
 
-        EnhancedInputComponent->BindAction(ShootAction, ETriggerEvent::Triggered, WeaponComponent, &USTUWeaponComponent::Fire);
+        EnhancedInputComponent->BindAction(ShootAction, ETriggerEvent::Started, WeaponComponent, &USTUWeaponComponent::StartFire);
+        EnhancedInputComponent->BindAction(ShootAction, ETriggerEvent::Completed, WeaponComponent, &USTUWeaponComponent::StopFire);
     }
 }
 
@@ -151,6 +153,15 @@ void ASTUBaseCharacter::StopRunning()
 bool ASTUBaseCharacter::IsRunning() const
 {
     return WantsToRun && IsMovingForward && !GetVelocity().IsZero();
+}
+
+FRotator ASTUBaseCharacter::GetAimOffsets() const
+{
+    const FVector AimDirWS = GetBaseAimRotation().Vector();
+    const FVector AimDirLS = ActorToWorld().InverseTransformVectorNoScale(AimDirWS);
+    const FRotator AimRotLS = AimDirLS.Rotation();
+
+    return AimRotLS;
 }
 
 void ASTUBaseCharacter::OnDeath()
