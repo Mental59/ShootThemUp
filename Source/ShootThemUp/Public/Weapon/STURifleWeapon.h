@@ -17,7 +17,7 @@ public:
 
 protected:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Shooting", meta = (ClampMin = "0.0"))
-    float FireRate = 0.1f;
+    float FireRate = 0.075f;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Shooting", meta = (ClampMin = "0.0"))
     float FireSpread = 1.5f;

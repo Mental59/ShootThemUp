@@ -67,6 +67,12 @@ protected:
     UPROPERTY(BlueprintReadWrite, Category = "Movement")
     bool CanMove = true;
 
+    UPROPERTY(BlueprintReadWrite, Category = "Movement")
+    bool WantsToTurnRight = false;
+
+    UPROPERTY(BlueprintReadWrite, Category = "Movement")
+    bool WantsToTurnLeft = false;
+
     UFUNCTION(BlueprintCallable, Category = "Movement")
     bool IsRunning() const;
 
@@ -82,22 +88,27 @@ protected:
     void Run();
     void StopRunning();
 
+    void StartFire();
+    void StopFire();
+
 public:
     virtual void Tick(float DeltaTime) override;
 
     virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 private:
-    UFUNCTION()
-    void OnGroundLanded(const FHitResult& Hit);
-
     float DefaultWalkSpeed;
 
     bool WantsToRun = false;
 
     bool IsMovingForward = false;
 
+    UFUNCTION()
+    void OnGroundLanded(const FHitResult& Hit);
+
     void OnDeath();
 
     void OnHealthChanged(float Health);
+
+    void TurnCharacter();
 };

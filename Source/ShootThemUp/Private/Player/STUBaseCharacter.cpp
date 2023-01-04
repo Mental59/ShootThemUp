@@ -41,8 +41,8 @@ ASTUBaseCharacter::ASTUBaseCharacter()
     bUseControllerRotationRoll = false;
 
     GetCharacterMovement()->bOrientRotationToMovement = false;
-    GetCharacterMovement()->bUseControllerDesiredRotation = true;
-    GetCharacterMovement()->RotationRate = FRotator(0.0f, 500.0f, 0.0f);
+    GetCharacterMovement()->bUseControllerDesiredRotation = false;
+    GetCharacterMovement()->RotationRate = FRotator(0.0f, 230.0f, 0.0f);
 }
 
 void ASTUBaseCharacter::BeginPlay()
@@ -94,41 +94,73 @@ void ASTUBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
         EnhancedInputComponent->BindAction(RunAction, ETriggerEvent::Triggered, this, &ASTUBaseCharacter::Run);
         EnhancedInputComponent->BindAction(RunAction, ETriggerEvent::Completed, this, &ASTUBaseCharacter::StopRunning);
 
-        EnhancedInputComponent->BindAction(ShootAction, ETriggerEvent::Started, WeaponComponent, &USTUWeaponComponent::StartFire);
-        EnhancedInputComponent->BindAction(ShootAction, ETriggerEvent::Completed, WeaponComponent, &USTUWeaponComponent::StopFire);
+        EnhancedInputComponent->BindAction(ShootAction, ETriggerEvent::Started, this, &ASTUBaseCharacter::StartFire);
+        EnhancedInputComponent->BindAction(ShootAction, ETriggerEvent::Completed, this, &ASTUBaseCharacter::StopFire);
     }
 }
 
 void ASTUBaseCharacter::Move(const FInputActionValue& Value)
 {
-    if (!CanMove) return;
+    if (!CanMove || !Controller) return;
 
     FVector2D MovementVector = Value.Get<FVector2D>();
 
-    if (Controller != nullptr)
+    IsMovingForward = MovementVector.Y > 0.0 && FMath::IsNearlyZero(MovementVector.X);
+
+    const FRotator Rotation = Controller->GetControlRotation();
+    const FRotator YawRotation(0, Rotation.Yaw, 0);
+
+    const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
+
+    const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
+
+    AddMovementInput(ForwardDirection, MovementVector.Y);
+    AddMovementInput(RightDirection, MovementVector.X);
+
+    if (!GetVelocity().IsZero())
     {
-        IsMovingForward = MovementVector.Y > 0.0 && FMath::IsNearlyZero(MovementVector.X);
-
-        const FRotator Rotation = Controller->GetControlRotation();
-        const FRotator YawRotation(0, Rotation.Yaw, 0);
-
-        const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
-
-        const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
-
-        AddMovementInput(ForwardDirection, MovementVector.Y);
-        AddMovementInput(RightDirection, MovementVector.X);
+        WantsToTurnRight = WantsToTurnLeft = false;
+        GetCharacterMovement()->bUseControllerDesiredRotation = true;
     }
 }
 
 void ASTUBaseCharacter::Look(const FInputActionValue& Value)
 {
+    if (!Controller) return;
+
     FVector2D LookAxisVector = Value.Get<FVector2D>();
 
-    if (Controller != nullptr)
+    AddControllerYawInput(LookAxisVector.X);
+    AddControllerPitchInput(LookAxisVector.Y);
+
+    TurnCharacter();
+}
+
+void ASTUBaseCharacter::TurnCharacter()
+{
+    if (!GetVelocity().IsZero()) return;
+
+    const FRotator AimOffsets = GetAimOffsets();
+
+    if (AimOffsets.Yaw > 90.0 && !WantsToTurnRight)
     {
-        AddControllerYawInput(LookAxisVector.X);
-        AddControllerPitchInput(LookAxisVector.Y);
+        UE_LOG(LogBaseCharacter, Display, TEXT("Turn right"));
+        WantsToTurnRight = true;
+        GetCharacterMovement()->bUseControllerDesiredRotation = true;
+    }
+
+    if (AimOffsets.Yaw < -90.0 && !WantsToTurnLeft)
+    {
+        UE_LOG(LogBaseCharacter, Display, TEXT("Turn left"));
+        WantsToTurnLeft = true;
+        GetCharacterMovement()->bUseControllerDesiredRotation = true;
+    }
+
+    if (FMath::IsNearlyZero(AimOffsets.Yaw, 1.0E-4))
+    {
+        UE_LOG(LogBaseCharacter, Display, TEXT("Not turning"));
+        WantsToTurnRight = WantsToTurnLeft = false;
+        GetCharacterMovement()->bUseControllerDesiredRotation = false;
     }
 }
 
@@ -183,6 +215,18 @@ void ASTUBaseCharacter::OnDeath()
 void ASTUBaseCharacter::OnHealthChanged(float Health)
 {
     HealthTextComponent->SetText(FText::FromString(FString::Printf(TEXT("%.0f"), Health)));
+}
+
+void ASTUBaseCharacter::StartFire()
+{
+    if (IsRunning()) return;
+    WeaponComponent->StartFire();
+}
+
+void ASTUBaseCharacter::StopFire()
+{
+    if (IsRunning()) return;
+    WeaponComponent->StopFire();
 }
 
 void ASTUBaseCharacter::OnGroundLanded(const FHitResult& Hit)
