@@ -44,3 +44,13 @@ bool ASTURifleWeapon::GetCameraTraceData(FVector& TraceStart, FVector& TraceEnd)
 
     return true;
 }
+
+void ASTURifleWeapon::MakeDamageToActor(const FHitResult& HitResult)
+{
+    if (HitResult.bBlockingHit)
+    {
+        AActor* DamagedActor = HitResult.GetActor();
+        if (!DamagedActor) return;
+        DamagedActor->TakeDamage(DamageAmount, FDamageEvent(), GetPlayerController(), this);
+    }
+}

@@ -85,16 +85,6 @@ void ASTUBaseWeapon::DrawDebugGeometry(const FHitResult& HitResult) const
     if (HitResult.bBlockingHit) DrawDebugSphere(GetWorld(), HitResult.ImpactPoint, 10.0f, 24, FColor::Red, false, 5.0f);
 }
 
-void ASTUBaseWeapon::MakeDamageToActor(const FHitResult& HitResult)
-{
-    if (HitResult.bBlockingHit)
-    {
-        AActor* DamagedActor = HitResult.GetActor();
-        if (!DamagedActor) return;
-        DamagedActor->TakeDamage(DamageAmount, FDamageEvent(), GetPlayerController(), this);
-    }
-}
-
 APlayerController* ASTUBaseWeapon::GetPlayerController() const
 {
     ACharacter* Player = GetPlayer();

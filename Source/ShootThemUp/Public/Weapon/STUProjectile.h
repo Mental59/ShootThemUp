@@ -14,9 +14,35 @@ class SHOOTTHEMUP_API ASTUProjectile : public AActor
 public:
     ASTUProjectile();
 
+    void SetShotDirection(const FVector& Direction);
+
 protected:
-    UPROPERTY(VisibleDefaultsOnly, Category = "Weapon")
+    UPROPERTY(VisibleAnywhere, Category = "Weapon")
     class USphereComponent* CollisionComponent;
 
+    UPROPERTY(VisibleAnywhere, Category = "Weapon")
+    class UProjectileMovementComponent* MovementComponent;
+
+    UPROPERTY(EditDefaultsOnly, Category = "Weapon")
+    float LifeSpan = 5.0f;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
+    float DamageRaduis = 200.0f;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
+    float DamageAmount = 50.0f;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
+    bool DoFullDamage = false;
+
     virtual void BeginPlay() override;
+
+private:
+    FVector ShotDirection;
+
+    UFUNCTION()
+    void OnProjectileHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse,
+        const FHitResult& Hit);
+
+    AController* GetOwnerController() const;
 };

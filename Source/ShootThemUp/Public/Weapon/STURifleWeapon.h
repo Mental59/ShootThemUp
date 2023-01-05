@@ -22,8 +22,12 @@ protected:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Shooting", meta = (ClampMin = "0.0"))
     float FireSpread = 1.5f;
 
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Shooting", meta = (ClampMin = "0.0"))
+    float DamageAmount = 10.0f;
+
     virtual void MakeShot() override;
     virtual bool GetCameraTraceData(FVector& TraceStart, FVector& TraceEnd) const override;
+    void MakeDamageToActor(const FHitResult& HitResult);
 
 private:
     FTimerHandle ShootTimerHandle;

@@ -11,9 +11,23 @@ void ASTULauncherWeapon::StartFire()
 
 void ASTULauncherWeapon::MakeShot()
 {
-    const FTransform SpawnTransform(FRotator::ZeroRotator, GetMuzzleWorldLocation());
-    auto Projectile = UGameplayStatics::BeginDeferredActorSpawnFromClass(GetWorld(), ProjectileClass, SpawnTransform);
-    // set projectile parameters
+    if (!GetWorld()) return;
 
-    UGameplayStatics::FinishSpawningActor(Projectile, SpawnTransform);
+    FVector CameraTraceStart, CameraTraceEnd;
+    if (!GetCameraTraceData(CameraTraceStart, CameraTraceEnd)) return;
+
+    FHitResult HitResult;
+    LineTrace(HitResult, CameraTraceStart, CameraTraceEnd);
+
+    const FVector EndPoint = HitResult.bBlockingHit ? HitResult.ImpactPoint : HitResult.TraceEnd;
+    const FVector Direction = (EndPoint - GetMuzzleWorldLocation()).GetSafeNormal();
+
+    const FTransform SpawnTransform(FRotator::ZeroRotator, GetMuzzleWorldLocation());
+    ASTUProjectile* Projectile = GetWorld()->SpawnActorDeferred<ASTUProjectile>(ProjectileClass, SpawnTransform);
+    if (Projectile)
+    {
+        Projectile->SetShotDirection(Direction);
+        Projectile->SetOwner(GetOwner());
+        Projectile->FinishSpawning(SpawnTransform);
+    }
 }

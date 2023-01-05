@@ -30,9 +30,6 @@ protected:
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Shooting", meta = (ClampMin = "0.0", ClampMax = "180.0"))
     float MaxAngleBetweenPlayerAndTrace = 96.0f;
 
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Shooting", meta = (ClampMin = "0.0"))
-    float DamageAmount = 10.0f;
-
     virtual void BeginPlay() override;
 
     virtual void MakeShot();
@@ -44,8 +41,6 @@ protected:
     void LineTrace(FHitResult& HitResult, const FVector& TraceStart, const FVector& TraceEnd);
 
     float GetAngleBetweenPlayerAndTrace(const FVector& ImpactPoint, const ACharacter* Player) const;
-
-    void MakeDamageToActor(const FHitResult& HitResult);
 
     APlayerController* GetPlayerController() const;
 
