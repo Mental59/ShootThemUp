@@ -20,7 +20,10 @@ ASTUBaseWeapon::ASTUBaseWeapon()
 void ASTUBaseWeapon::BeginPlay()
 {
     Super::BeginPlay();
+
     check(WeaponMesh);
+
+    CurrentAmmo = DefaultAmmo;
 }
 
 void ASTUBaseWeapon::StartFire() {}
@@ -101,4 +104,42 @@ ACharacter* ASTUBaseWeapon::GetPlayer() const
 FVector ASTUBaseWeapon::GetMuzzleWorldLocation() const
 {
     return WeaponMesh->GetSocketLocation(MuzzleSocketName);
+}
+
+void ASTUBaseWeapon::DecreaseAmmo()
+{
+    CurrentAmmo.NumBullets--;
+    LogAmmo();
+
+    if (IsMagazineEmpty() && CurrentAmmo.NumMagazines > 0)
+    {
+        ChangeMagazine();
+    }
+}
+
+void ASTUBaseWeapon::ChangeMagazine()
+{
+    CurrentAmmo.NumBullets = DefaultAmmo.NumBullets;
+    if (!CurrentAmmo.IsInfinite)
+    {
+        CurrentAmmo.NumMagazines--;
+    }
+    UE_LOG(LogBaseWeapon, Display, TEXT("ChangeMagazine"));
+}
+
+bool ASTUBaseWeapon::IsOutOfAmmo() const
+{
+    return !CurrentAmmo.IsInfinite && CurrentAmmo.NumBullets == 0 && IsMagazineEmpty();
+}
+
+bool ASTUBaseWeapon::IsMagazineEmpty() const
+{
+    return CurrentAmmo.NumBullets == 0;
+}
+
+void ASTUBaseWeapon::LogAmmo()
+{
+    FString AmmoInfo = "Ammo: " + FString::FromInt(CurrentAmmo.NumBullets) + "/" +
+                       (CurrentAmmo.IsInfinite ? "Infinite" : FString::FromInt(CurrentAmmo.NumMagazines));
+    UE_LOG(LogBaseWeapon, Display, TEXT("%s"), *AmmoInfo);
 }

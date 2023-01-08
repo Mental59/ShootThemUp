@@ -17,16 +17,20 @@ void ASTURifleWeapon::StopFire()
 
 void ASTURifleWeapon::MakeShot()
 {
-    if (!GetWorld()) return;
-
     FVector CameraTraceStart, CameraTraceEnd;
-    if (!GetCameraTraceData(CameraTraceStart, CameraTraceEnd)) return;
+    if (!GetWorld() || IsOutOfAmmo() || !GetCameraTraceData(CameraTraceStart, CameraTraceEnd))
+    {
+        StopFire();
+        return;
+    }
 
     FHitResult HitResult;
     LineTrace(HitResult, CameraTraceStart, CameraTraceEnd);
 
     MakeDamageToActor(HitResult);
     DrawDebugGeometry(HitResult);
+
+    DecreaseAmmo();
 }
 
 bool ASTURifleWeapon::GetCameraTraceData(FVector& TraceStart, FVector& TraceEnd) const
