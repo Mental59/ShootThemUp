@@ -96,6 +96,8 @@ void ASTUBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 
         EnhancedInputComponent->BindAction(ShootAction, ETriggerEvent::Started, this, &ASTUBaseCharacter::StartFire);
         EnhancedInputComponent->BindAction(ShootAction, ETriggerEvent::Completed, this, &ASTUBaseCharacter::StopFire);
+
+        EnhancedInputComponent->BindAction(NextWeaponAction, ETriggerEvent::Triggered, WeaponComponent, &USTUWeaponComponent::NextWeapon);
     }
 }
 
@@ -210,6 +212,7 @@ void ASTUBaseCharacter::OnDeath()
     }
 
     GetCapsuleComponent()->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
+    WeaponComponent->StopFire();
 }
 
 void ASTUBaseCharacter::OnHealthChanged(float Health)
