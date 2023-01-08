@@ -146,21 +146,18 @@ void ASTUBaseCharacter::TurnCharacter()
 
     if (AimOffsets.Yaw > 90.0 && !WantsToTurnRight)
     {
-        UE_LOG(LogBaseCharacter, Display, TEXT("Turn right"));
         WantsToTurnRight = true;
         GetCharacterMovement()->bUseControllerDesiredRotation = true;
     }
 
     if (AimOffsets.Yaw < -90.0 && !WantsToTurnLeft)
     {
-        UE_LOG(LogBaseCharacter, Display, TEXT("Turn left"));
         WantsToTurnLeft = true;
         GetCharacterMovement()->bUseControllerDesiredRotation = true;
     }
 
     if (FMath::IsNearlyZero(AimOffsets.Yaw, 1.0E-4))
     {
-        UE_LOG(LogBaseCharacter, Display, TEXT("Not turning"));
         WantsToTurnRight = WantsToTurnLeft = false;
         GetCharacterMovement()->bUseControllerDesiredRotation = false;
     }

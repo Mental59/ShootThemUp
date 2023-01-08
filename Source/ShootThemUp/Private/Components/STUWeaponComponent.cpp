@@ -4,6 +4,9 @@
 #include <Weapon/STUBaseWeapon.h>
 #include <GameFramework/Character.h>
 #include <Components/SceneComponent.h>
+#include "Animations/STUEqiupFinishedAnimNotify.h"
+
+DEFINE_LOG_CATEGORY_STATIC(LogWeaponComponent, All, All);
 
 USTUWeaponComponent::USTUWeaponComponent()
 {
@@ -15,6 +18,7 @@ void USTUWeaponComponent::BeginPlay()
 {
     Super::BeginPlay();
 
+    InitAnimations();
     SpawnWeapons();
     EquipWeapon(CurrentWeaponIndex);
 }
@@ -77,11 +81,45 @@ void USTUWeaponComponent::EquipWeapon(int32 WeaponIndex)
 
     CurrentWeapon = Weapons[WeaponIndex];
     AttachWeaponToSocket(CurrentWeapon, Character->GetMesh(), WeaponEquipSocketName);
+    EqiupAnimInProgress = true;
+    PlayAnimMontage(EquipAnimMontage);
+}
+
+void USTUWeaponComponent::PlayAnimMontage(UAnimMontage* AnimMontage)
+{
+    ACharacter* Character = GetCharacter();
+    if (!Character) return;
+
+    Character->PlayAnimMontage(AnimMontage);
+}
+
+void USTUWeaponComponent::InitAnimations()
+{
+    if (!EquipAnimMontage) return;
+
+    for (auto& NotifyEvent : EquipAnimMontage->Notifies)
+    {
+        auto EquipFinishedAnimNotify = Cast<USTUEqiupFinishedAnimNotify>(NotifyEvent.Notify);
+        if (EquipFinishedAnimNotify)
+        {
+            EquipFinishedAnimNotify->OnNotified.AddUObject(this, &USTUWeaponComponent::OnEquipFinished);
+            break;
+        }
+    }
+}
+
+void USTUWeaponComponent::OnEquipFinished(class USkeletalMeshComponent* MeshComp)
+{
+    ACharacter* Character = GetCharacter();
+    if (!Character || Character->GetMesh() != MeshComp) return;
+
+    EqiupAnimInProgress = false;
+    UE_LOG(LogWeaponComponent, Display, TEXT("Equip finished"));
 }
 
 void USTUWeaponComponent::StartFire()
 {
-    if (!CurrentWeapon) return;
+    if (!CanFire()) return;
     CurrentWeapon->StartFire();
 }
 
@@ -93,6 +131,17 @@ void USTUWeaponComponent::StopFire()
 
 void USTUWeaponComponent::NextWeapon()
 {
+    if (!CanEquip()) return;
     CurrentWeaponIndex = (CurrentWeaponIndex + 1) % Weapons.Num();
     EquipWeapon(CurrentWeaponIndex);
+}
+
+bool USTUWeaponComponent::CanFire() const
+{
+    return CurrentWeapon && !EqiupAnimInProgress;
+}
+
+bool USTUWeaponComponent::CanEquip() const
+{
+    return !EqiupAnimInProgress;
 }
