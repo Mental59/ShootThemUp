@@ -61,6 +61,7 @@ protected:
 
     bool IsOutOfAmmo() const;
     bool IsMagazineEmpty() const;
+    bool HasMagazines() const;
 
     void LogAmmo();
 

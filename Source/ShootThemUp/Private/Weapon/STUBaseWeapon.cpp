@@ -117,7 +117,7 @@ void ASTUBaseWeapon::DecreaseAmmo()
     CurrentAmmo.NumBullets--;
     LogAmmo();
 
-    if (IsMagazineEmpty() && (CurrentAmmo.NumMagazines > 0 || CurrentAmmo.IsInfinite))
+    if (IsMagazineEmpty() && HasMagazines())
     {
         StopFire();
         OnMagazineEmpty.Broadcast();
@@ -141,17 +141,22 @@ void ASTUBaseWeapon::ChangeMagazine()
 
 bool ASTUBaseWeapon::CanReload() const
 {
-    return CurrentAmmo.NumBullets < DefaultAmmo.NumBullets && CurrentAmmo.NumMagazines > 0 || CurrentAmmo.IsInfinite;
+    return CurrentAmmo.NumBullets < DefaultAmmo.NumBullets && HasMagazines();
 }
 
 bool ASTUBaseWeapon::IsOutOfAmmo() const
 {
-    return !CurrentAmmo.IsInfinite && CurrentAmmo.NumBullets == 0 && IsMagazineEmpty();
+    return IsMagazineEmpty() && !HasMagazines();
 }
 
 bool ASTUBaseWeapon::IsMagazineEmpty() const
 {
     return CurrentAmmo.NumBullets == 0;
+}
+
+bool ASTUBaseWeapon::HasMagazines() const
+{
+    return CurrentAmmo.NumMagazines > 0 || CurrentAmmo.IsInfinite;
 }
 
 void ASTUBaseWeapon::LogAmmo()
