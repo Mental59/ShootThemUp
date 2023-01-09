@@ -108,23 +108,40 @@ FVector ASTUBaseWeapon::GetMuzzleWorldLocation() const
 
 void ASTUBaseWeapon::DecreaseAmmo()
 {
+    if (CurrentAmmo.NumBullets == 0)
+    {
+        UE_LOG(LogBaseWeapon, Warning, TEXT("Magazine is empty!"));
+        return;
+    }
+
     CurrentAmmo.NumBullets--;
     LogAmmo();
 
     if (IsMagazineEmpty() && CurrentAmmo.NumMagazines > 0)
     {
-        ChangeMagazine();
+        StopFire();
+        OnMagazineEmpty.Broadcast();
     }
 }
 
 void ASTUBaseWeapon::ChangeMagazine()
 {
-    CurrentAmmo.NumBullets = DefaultAmmo.NumBullets;
     if (!CurrentAmmo.IsInfinite)
     {
+        if (CurrentAmmo.NumMagazines == 0)
+        {
+            UE_LOG(LogBaseWeapon, Warning, TEXT("No more magazines!"));
+            return;
+        }
         CurrentAmmo.NumMagazines--;
     }
-    UE_LOG(LogBaseWeapon, Display, TEXT("ChangeMagazine"));
+    CurrentAmmo.NumBullets = DefaultAmmo.NumBullets;
+    UE_LOG(LogBaseWeapon, Display, TEXT("--- ChangeMagazine ---"));
+}
+
+bool ASTUBaseWeapon::CanReload() const
+{
+    return CurrentAmmo.NumBullets < DefaultAmmo.NumBullets && CurrentAmmo.NumMagazines > 0;
 }
 
 bool ASTUBaseWeapon::IsOutOfAmmo() const

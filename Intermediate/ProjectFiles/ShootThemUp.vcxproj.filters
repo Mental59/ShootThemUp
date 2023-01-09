@@ -1,0 +1,197 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <None Include="..\..\ShootThemUp.uproject" />
+    <Filter Include="Source">
+      <UniqueIdentifier>{F31BBDD1-B3E8-3BCC-9652-680E16935819}</UniqueIdentifier>
+    </Filter>
+    <None Include="..\..\Source\ShootThemUp.Target.cs">
+      <Filter>Source</Filter>
+    </None>
+    <None Include="..\..\Source\ShootThemUpEditor.Target.cs">
+      <Filter>Source</Filter>
+    </None>
+    <None Include="..\..\.clang-format" />
+    <None Include="..\..\.gitattributes" />
+    <None Include="..\..\.gitignore" />
+    <None Include="..\..\.vsconfig" />
+    <None Include="..\..\README.md" />
+    <Filter Include="Config">
+      <UniqueIdentifier>{FA535FFB-25E1-3D20-B416-52F9BE21E06E}</UniqueIdentifier>
+    </Filter>
+    <None Include="..\..\Config\DefaultEditor.ini">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="..\..\Config\DefaultEngine.ini">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="..\..\Config\DefaultGame.ini">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="..\..\Config\DefaultInput.ini">
+      <Filter>Config</Filter>
+    </None>
+    <Filter Include="Platforms">
+      <UniqueIdentifier>{ED49A36C-4FD5-37E5-A2AC-E11BEF4F21CF}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platforms\HoloLens">
+      <UniqueIdentifier>{28125F47-4973-377C-9D77-EBC3C72EC856}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platforms\HoloLens\Config">
+      <UniqueIdentifier>{D3BF39CB-FA64-39E2-A327-B5021BA69773}</UniqueIdentifier>
+    </Filter>
+    <None Include="..\..\Platforms\HoloLens\Config\HoloLensEngine.ini">
+      <Filter>Platforms\HoloLens\Config</Filter>
+    </None>
+    <Filter Include="Source\ShootThemUp">
+      <UniqueIdentifier>{DCB7C3D0-3069-3BC9-962F-B8B72DFC9862}</UniqueIdentifier>
+    </Filter>
+    <None Include="..\..\Source\ShootThemUp\ShootThemUp.Build.cs">
+      <Filter>Source\ShootThemUp</Filter>
+    </None>
+    <ClCompile Include="..\..\Source\ShootThemUp\ShootThemUp.cpp">
+      <Filter>Source\ShootThemUp</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\ShootThemUp\ShootThemUp.h">
+      <Filter>Source\ShootThemUp</Filter>
+    </ClInclude>
+    <Filter Include="Source\ShootThemUp\Private">
+      <UniqueIdentifier>{A56CB85E-E036-3F11-A601-EFEE3FBF4593}</UniqueIdentifier>
+    </Filter>
+    <ClCompile Include="..\..\Source\ShootThemUp\Private\STUGameModeBase.cpp">
+      <Filter>Source\ShootThemUp\Private</Filter>
+    </ClCompile>
+    <Filter Include="Source\ShootThemUp\Private\Animations">
+      <UniqueIdentifier>{65545553-141F-3C90-A503-A8BABE70F736}</UniqueIdentifier>
+    </Filter>
+    <ClCompile Include="..\..\Source\ShootThemUp\Private\Animations\STUAnimNotify.cpp">
+      <Filter>Source\ShootThemUp\Private\Animations</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ShootThemUp\Private\Animations\STUEqiupFinishedAnimNotify.cpp">
+      <Filter>Source\ShootThemUp\Private\Animations</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ShootThemUp\Private\Animations\STUReloadFinishedAnimNotify.cpp">
+      <Filter>Source\ShootThemUp\Private\Animations</Filter>
+    </ClCompile>
+    <Filter Include="Source\ShootThemUp\Private\Components">
+      <UniqueIdentifier>{3DAA24FB-DFA9-30F5-A523-CA7CFE67650F}</UniqueIdentifier>
+    </Filter>
+    <ClCompile Include="..\..\Source\ShootThemUp\Private\Components\STUHealthComponent.cpp">
+      <Filter>Source\ShootThemUp\Private\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ShootThemUp\Private\Components\STUWeaponComponent.cpp">
+      <Filter>Source\ShootThemUp\Private\Components</Filter>
+    </ClCompile>
+    <Filter Include="Source\ShootThemUp\Private\Dev">
+      <UniqueIdentifier>{3167F9D1-42DB-3C59-9EA6-AAFD1CF6DDA2}</UniqueIdentifier>
+    </Filter>
+    <ClCompile Include="..\..\Source\ShootThemUp\Private\Dev\STUDevDamageActor.cpp">
+      <Filter>Source\ShootThemUp\Private\Dev</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ShootThemUp\Private\Dev\STUFireDamageType.cpp">
+      <Filter>Source\ShootThemUp\Private\Dev</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ShootThemUp\Private\Dev\STUIceDamageType.cpp">
+      <Filter>Source\ShootThemUp\Private\Dev</Filter>
+    </ClCompile>
+    <Filter Include="Source\ShootThemUp\Private\Player">
+      <UniqueIdentifier>{4DEF6B57-D49A-3239-A486-AEEDB853958E}</UniqueIdentifier>
+    </Filter>
+    <ClCompile Include="..\..\Source\ShootThemUp\Private\Player\STUBaseCharacter.cpp">
+      <Filter>Source\ShootThemUp\Private\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ShootThemUp\Private\Player\STUPlayerController.cpp">
+      <Filter>Source\ShootThemUp\Private\Player</Filter>
+    </ClCompile>
+    <Filter Include="Source\ShootThemUp\Private\UI">
+      <UniqueIdentifier>{E9442ACD-BE6D-3D6A-9B23-A60103DF4CF3}</UniqueIdentifier>
+    </Filter>
+    <ClCompile Include="..\..\Source\ShootThemUp\Private\UI\STUGameHUD.cpp">
+      <Filter>Source\ShootThemUp\Private\UI</Filter>
+    </ClCompile>
+    <Filter Include="Source\ShootThemUp\Private\Weapon">
+      <UniqueIdentifier>{D88871AC-4417-324F-9C06-C49CE715984B}</UniqueIdentifier>
+    </Filter>
+    <ClCompile Include="..\..\Source\ShootThemUp\Private\Weapon\STUBaseWeapon.cpp">
+      <Filter>Source\ShootThemUp\Private\Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ShootThemUp\Private\Weapon\STULauncherWeapon.cpp">
+      <Filter>Source\ShootThemUp\Private\Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ShootThemUp\Private\Weapon\STUProjectile.cpp">
+      <Filter>Source\ShootThemUp\Private\Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ShootThemUp\Private\Weapon\STURifleWeapon.cpp">
+      <Filter>Source\ShootThemUp\Private\Weapon</Filter>
+    </ClCompile>
+    <Filter Include="Source\ShootThemUp\Public">
+      <UniqueIdentifier>{5160F4A4-581A-3D50-8080-6789BCCB3A5A}</UniqueIdentifier>
+    </Filter>
+    <ClInclude Include="..\..\Source\ShootThemUp\Public\STUGameModeBase.h">
+      <Filter>Source\ShootThemUp\Public</Filter>
+    </ClInclude>
+    <Filter Include="Source\ShootThemUp\Public\Animations">
+      <UniqueIdentifier>{2B534D3B-59B1-3DD6-B218-FB3346EC16F4}</UniqueIdentifier>
+    </Filter>
+    <ClInclude Include="..\..\Source\ShootThemUp\Public\Animations\STUAnimNotify.h">
+      <Filter>Source\ShootThemUp\Public\Animations</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ShootThemUp\Public\Animations\STUEqiupFinishedAnimNotify.h">
+      <Filter>Source\ShootThemUp\Public\Animations</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ShootThemUp\Public\Animations\STUReloadFinishedAnimNotify.h">
+      <Filter>Source\ShootThemUp\Public\Animations</Filter>
+    </ClInclude>
+    <Filter Include="Source\ShootThemUp\Public\Components">
+      <UniqueIdentifier>{B24325C3-A067-315E-9406-5950E22F830D}</UniqueIdentifier>
+    </Filter>
+    <ClInclude Include="..\..\Source\ShootThemUp\Public\Components\STUHealthComponent.h">
+      <Filter>Source\ShootThemUp\Public\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ShootThemUp\Public\Components\STUWeaponComponent.h">
+      <Filter>Source\ShootThemUp\Public\Components</Filter>
+    </ClInclude>
+    <Filter Include="Source\ShootThemUp\Public\Dev">
+      <UniqueIdentifier>{B212C762-AEBD-3526-A26C-4CE0E5108792}</UniqueIdentifier>
+    </Filter>
+    <ClInclude Include="..\..\Source\ShootThemUp\Public\Dev\STUDevDamageActor.h">
+      <Filter>Source\ShootThemUp\Public\Dev</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ShootThemUp\Public\Dev\STUFireDamageType.h">
+      <Filter>Source\ShootThemUp\Public\Dev</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ShootThemUp\Public\Dev\STUIceDamageType.h">
+      <Filter>Source\ShootThemUp\Public\Dev</Filter>
+    </ClInclude>
+    <Filter Include="Source\ShootThemUp\Public\Player">
+      <UniqueIdentifier>{08A4E2A7-53B3-3751-99EB-2B6461FBA8F9}</UniqueIdentifier>
+    </Filter>
+    <ClInclude Include="..\..\Source\ShootThemUp\Public\Player\STUBaseCharacter.h">
+      <Filter>Source\ShootThemUp\Public\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ShootThemUp\Public\Player\STUPlayerController.h">
+      <Filter>Source\ShootThemUp\Public\Player</Filter>
+    </ClInclude>
+    <Filter Include="Source\ShootThemUp\Public\UI">
+      <UniqueIdentifier>{E5DC152E-BBAE-3E0B-9BEE-5ACEB1C275D9}</UniqueIdentifier>
+    </Filter>
+    <ClInclude Include="..\..\Source\ShootThemUp\Public\UI\STUGameHUD.h">
+      <Filter>Source\ShootThemUp\Public\UI</Filter>
+    </ClInclude>
+    <Filter Include="Source\ShootThemUp\Public\Weapon">
+      <UniqueIdentifier>{83FF5830-1ABF-34C7-811E-BDC3B4DCA12A}</UniqueIdentifier>
+    </Filter>
+    <ClInclude Include="..\..\Source\ShootThemUp\Public\Weapon\STUBaseWeapon.h">
+      <Filter>Source\ShootThemUp\Public\Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ShootThemUp\Public\Weapon\STULauncherWeapon.h">
+      <Filter>Source\ShootThemUp\Public\Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ShootThemUp\Public\Weapon\STUProjectile.h">
+      <Filter>Source\ShootThemUp\Public\Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ShootThemUp\Public\Weapon\STURifleWeapon.h">
+      <Filter>Source\ShootThemUp\Public\Weapon</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
