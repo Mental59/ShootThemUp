@@ -22,6 +22,11 @@ bool USTUHealthComponent::IsDead() const
     return FMath::IsNearlyZero(Health);
 }
 
+float USTUHealthComponent::GetHealthPercent() const
+{
+    return Health / MaxHealth;
+}
+
 // Called when the game starts
 void USTUHealthComponent::BeginPlay()
 {
