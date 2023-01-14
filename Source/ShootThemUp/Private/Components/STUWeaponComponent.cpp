@@ -176,6 +176,26 @@ void USTUWeaponComponent::ReloadWeapon()
     ChangeMagazine();
 }
 
+bool USTUWeaponComponent::GetWeaponUIData(FWeaponUIData& UIData) const
+{
+    if (CurrentWeapon)
+    {
+        UIData = CurrentWeapon->GetUIData();
+        return true;
+    }
+    return false;
+}
+
+bool USTUWeaponComponent::GetAmmoData(FAmmoData& AmmoData) const
+{
+    if (CurrentWeapon)
+    {
+        AmmoData = CurrentWeapon->GetAmmoData();
+        return true;
+    }
+    return false;
+}
+
 void USTUWeaponComponent::OnMagazineEmpty()
 {
     ChangeMagazine();

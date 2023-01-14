@@ -23,6 +23,10 @@ public:
     void ChangeMagazine();
     bool CanReload() const;
 
+    const FWeaponUIData& GetUIData() const;
+
+    const FAmmoData& GetAmmoData() const;
+
 protected:
     UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
     class USkeletalMeshComponent* WeaponMesh;
@@ -38,6 +42,9 @@ protected:
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
     FAmmoData DefaultAmmo{15, 10, false};
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
+    FWeaponUIData UIData;
 
     virtual void BeginPlay() override;
 

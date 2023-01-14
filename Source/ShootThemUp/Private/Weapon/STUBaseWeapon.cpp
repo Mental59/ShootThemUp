@@ -144,6 +144,16 @@ bool ASTUBaseWeapon::CanReload() const
     return CurrentAmmo.NumBullets < DefaultAmmo.NumBullets && HasMagazines();
 }
 
+const FWeaponUIData& ASTUBaseWeapon::GetUIData() const
+{
+    return UIData;
+}
+
+const FAmmoData& ASTUBaseWeapon::GetAmmoData() const
+{
+    return CurrentAmmo;
+}
+
 bool ASTUBaseWeapon::IsOutOfAmmo() const
 {
     return IsMagazineEmpty() && !HasMagazines();
