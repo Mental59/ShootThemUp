@@ -22,6 +22,12 @@ public:
     UFUNCTION(BlueprintCallable, Category = "UI")
     bool GetAmmoData(FAmmoData& AmmoData) const;
 
+    UFUNCTION(BlueprintCallable, Category = "UI")
+    bool IsPlayerAlive() const;
+
+    UFUNCTION(BlueprintCallable, Category = "UI")
+    bool IsPlayerSpectating() const;
+
 private:
     template <typename T>
     T* GetComponent() const;

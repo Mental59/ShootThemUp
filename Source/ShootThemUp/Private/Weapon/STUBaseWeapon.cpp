@@ -108,14 +108,9 @@ FVector ASTUBaseWeapon::GetMuzzleWorldLocation() const
 
 void ASTUBaseWeapon::DecreaseAmmo()
 {
-    if (CurrentAmmo.NumBullets == 0)
-    {
-        UE_LOG(LogBaseWeapon, Warning, TEXT("Magazine is empty!"));
-        return;
-    }
+    if (CurrentAmmo.NumBullets == 0) return;
 
     CurrentAmmo.NumBullets--;
-    LogAmmo();
 
     if (IsMagazineEmpty() && HasMagazines())
     {
@@ -128,15 +123,10 @@ void ASTUBaseWeapon::ChangeMagazine()
 {
     if (!CurrentAmmo.IsInfinite)
     {
-        if (CurrentAmmo.NumMagazines == 0)
-        {
-            UE_LOG(LogBaseWeapon, Warning, TEXT("No more magazines!"));
-            return;
-        }
+        if (CurrentAmmo.NumMagazines == 0) return;
         CurrentAmmo.NumMagazines--;
     }
     CurrentAmmo.NumBullets = DefaultAmmo.NumBullets;
-    UE_LOG(LogBaseWeapon, Display, TEXT("--- ChangeMagazine ---"));
 }
 
 bool ASTUBaseWeapon::CanReload() const
