@@ -35,7 +35,7 @@ protected:
     FName MuzzleSocketName = "MuzzleSocket";
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon", meta = (ClampMin = "0.0"))
-    float TraceMaxDistance = 1500.0f;
+    float TraceMaxDistance = 100000.0f;
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon", meta = (ClampMin = "0.0", ClampMax = "180.0"))
     float MaxAngleBetweenPlayerAndTrace = 96.0f;
