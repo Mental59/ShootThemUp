@@ -115,7 +115,7 @@ void ASTUBaseWeapon::DecreaseAmmo()
     if (IsMagazineEmpty() && HasMagazines())
     {
         StopFire();
-        OnMagazineEmpty.Broadcast();
+        OnMagazineEmpty.Broadcast(this);
     }
 }
 
@@ -144,6 +144,36 @@ const FAmmoData& ASTUBaseWeapon::GetAmmoData() const
     return CurrentAmmo;
 }
 
+bool ASTUBaseWeapon::TryToAddAmmo(int32 MagazinesAmount)
+{
+    if (CurrentAmmo.IsInfinite || IsAmmoFull() || MagazinesAmount <= 0) return false;
+
+    if (IsOutOfAmmo())
+    {
+        CurrentAmmo.NumMagazines = FMath::Clamp(MagazinesAmount, 0, DefaultAmmo.NumMagazines + 1);
+        OnMagazineEmpty.Broadcast(this);
+    }
+    else if (CurrentAmmo.NumMagazines < DefaultAmmo.NumMagazines)
+    {
+        const int32 NextMagazineAmount = CurrentAmmo.NumMagazines + MagazinesAmount;
+        if (DefaultAmmo.NumMagazines - NextMagazineAmount >= 0)
+        {
+            CurrentAmmo.NumMagazines = NextMagazineAmount;
+        }
+        else
+        {
+            CurrentAmmo.NumMagazines = DefaultAmmo.NumMagazines;
+            CurrentAmmo.NumBullets = DefaultAmmo.NumBullets;
+        }
+    }
+    else
+    {
+        CurrentAmmo.NumBullets = DefaultAmmo.NumBullets;
+    }
+
+    return true;
+}
+
 bool ASTUBaseWeapon::IsOutOfAmmo() const
 {
     return IsMagazineEmpty() && !HasMagazines();
@@ -157,6 +187,11 @@ bool ASTUBaseWeapon::IsMagazineEmpty() const
 bool ASTUBaseWeapon::HasMagazines() const
 {
     return CurrentAmmo.NumMagazines > 0 || CurrentAmmo.IsInfinite;
+}
+
+bool ASTUBaseWeapon::IsAmmoFull() const
+{
+    return CurrentAmmo.NumMagazines == DefaultAmmo.NumMagazines && CurrentAmmo.NumBullets == DefaultAmmo.NumBullets;
 }
 
 void ASTUBaseWeapon::LogAmmo()

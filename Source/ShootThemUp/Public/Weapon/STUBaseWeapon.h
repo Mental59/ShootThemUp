@@ -27,6 +27,8 @@ public:
 
     const FAmmoData& GetAmmoData() const;
 
+    bool TryToAddAmmo(int32 MagazinesAmount);
+
 protected:
     UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
     class USkeletalMeshComponent* WeaponMesh;
@@ -69,6 +71,7 @@ protected:
     bool IsOutOfAmmo() const;
     bool IsMagazineEmpty() const;
     bool HasMagazines() const;
+    bool IsAmmoFull() const;
 
     void LogAmmo();
 

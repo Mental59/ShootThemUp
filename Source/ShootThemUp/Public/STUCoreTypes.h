@@ -4,7 +4,7 @@
 
 #include "STUCoreTypes.generated.h"
 
-DECLARE_MULTICAST_DELEGATE(FOnMagazineEmptySignature);
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnMagazineEmptySignature, class ASTUBaseWeapon*);
 
 DECLARE_MULTICAST_DELEGATE(FOnDeathSignature);
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnHealthChangedSignature, float);

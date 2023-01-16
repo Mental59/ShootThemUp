@@ -24,7 +24,11 @@ public:
     UFUNCTION(BlueprintCallable, Category = "Health")
     float GetHealthPercent() const;
 
+    UFUNCTION(BlueprintCallable, Category = "Health")
+    bool IsHealthFull() const;
+
     float GetHealth() const;
+    void SetHealth(float NewHealth);
 
 protected:
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Health", meta = (ClampMin = "1.0"))
@@ -51,8 +55,6 @@ private:
     UFUNCTION()
     void OnTakeAnyDamage(
         AActor* DamagedActor, float Damage, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser);
-
-    void SetHealth(float NewHealth);
 
     void OnAutoHealTimerFired();
 

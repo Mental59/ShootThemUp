@@ -196,9 +196,30 @@ bool USTUWeaponComponent::GetAmmoData(FAmmoData& AmmoData) const
     return false;
 }
 
-void USTUWeaponComponent::OnMagazineEmpty()
+bool USTUWeaponComponent::TryToAddAmmo(TSubclassOf<class ASTUBaseWeapon> WeaponType, int32 MagazinesAmount)
 {
-    ChangeMagazine();
+    for (ASTUBaseWeapon* Weapon : Weapons)
+    {
+        if (Weapon && Weapon->IsA(WeaponType))
+        {
+            return Weapon->TryToAddAmmo(MagazinesAmount);
+        }
+    }
+    return false;
+}
+
+void USTUWeaponComponent::OnMagazineEmpty(ASTUBaseWeapon* EmptyWeapon)
+{
+    if (!EmptyWeapon) return;
+
+    if (CurrentWeapon == EmptyWeapon)
+    {
+        ChangeMagazine();
+    }
+    else
+    {
+        if (Weapons.Contains(EmptyWeapon)) EmptyWeapon->ChangeMagazine();
+    }
 }
 
 void USTUWeaponComponent::ChangeMagazine()

@@ -23,6 +23,8 @@ public:
     bool GetWeaponUIData(FWeaponUIData& UIData) const;
     bool GetAmmoData(FAmmoData& AmmoData) const;
 
+    bool TryToAddAmmo(TSubclassOf<class ASTUBaseWeapon> WeaponType, int32 MagazinesAmount);
+
 protected:
     UPROPERTY(EditDefaultsOnly, Category = "Weapon")
     TArray<FWeaponData> WeaponData;
@@ -68,6 +70,6 @@ private:
     bool CanEquip() const;
     bool CanReload() const;
 
-    void OnMagazineEmpty();
+    void OnMagazineEmpty(class ASTUBaseWeapon* EmptyWeapon);
     void ChangeMagazine();
 };

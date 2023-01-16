@@ -27,7 +27,11 @@ float USTUHealthComponent::GetHealthPercent() const
     return Health / MaxHealth;
 }
 
-// Called when the game starts
+bool USTUHealthComponent::IsHealthFull() const
+{
+    return FMath::IsNearlyEqual(Health, MaxHealth);
+}
+
 void USTUHealthComponent::BeginPlay()
 {
     Super::BeginPlay();
@@ -64,7 +68,7 @@ void USTUHealthComponent::OnAutoHealTimerFired()
 {
     SetHealth(Health + HealModifier);
 
-    if (FMath::IsNearlyEqual(Health, MaxHealth))
+    if (IsHealthFull())
     {
         ClearAutoHealTimer();
     }
