@@ -21,7 +21,12 @@ protected:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Pickup")
     float RespawnTime = 5.0f;
 
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Pickup")
+    float CollisionEnadleTime = 0.2f;
+
     virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
+
+    virtual void NotifyActorEndOverlap(AActor* OtherActor) override;
 
     virtual void BeginPlay() override;
 
@@ -31,10 +36,15 @@ public:
     virtual void Tick(float DeltaTime) override;
 
 private:
+    UPROPERTY()
+    TArray<class APawn*> OverlappingPawns;
+
     float RotationYaw = 0.0f;
 
     void PickupWasTaken();
     void Respawn();
 
     void GenerateRotationYaw();
+
+    void EnableCollision();
 };
