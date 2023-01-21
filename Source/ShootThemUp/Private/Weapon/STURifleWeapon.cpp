@@ -3,6 +3,12 @@
 #include "Weapon/STURifleWeapon.h"
 #include <Engine/World.h>
 #include <DrawDebugHelpers.h>
+#include "Weapon/Components/STUWeaponFXComponent.h"
+
+ASTURifleWeapon::ASTURifleWeapon()
+{
+    WeaponFXComponent = CreateDefaultSubobject<USTUWeaponFXComponent>("WeaponFXComponent");
+}
 
 void ASTURifleWeapon::StartFire()
 {
@@ -13,6 +19,13 @@ void ASTURifleWeapon::StartFire()
 void ASTURifleWeapon::StopFire()
 {
     GetWorldTimerManager().ClearTimer(ShootTimerHandle);
+}
+
+void ASTURifleWeapon::BeginPlay()
+{
+    Super::BeginPlay();
+
+    check(WeaponFXComponent);
 }
 
 void ASTURifleWeapon::MakeShot()
@@ -28,7 +41,8 @@ void ASTURifleWeapon::MakeShot()
     LineTrace(HitResult, CameraTraceStart, CameraTraceEnd);
 
     MakeDamageToActor(HitResult);
-    DrawDebugGeometry(HitResult);
+    PlayImpactFX(HitResult);
+    // DrawDebugGeometry(HitResult);
 
     DecreaseAmmo();
 }
@@ -56,5 +70,13 @@ void ASTURifleWeapon::MakeDamageToActor(const FHitResult& HitResult)
         AActor* DamagedActor = HitResult.GetActor();
         if (!DamagedActor) return;
         DamagedActor->TakeDamage(DamageAmount, FDamageEvent(), GetPlayerController(), this);
+    }
+}
+
+void ASTURifleWeapon::PlayImpactFX(const FHitResult& HitResult)
+{
+    if (HitResult.bBlockingHit)
+    {
+        WeaponFXComponent->PlayImpactFX(HitResult);
     }
 }

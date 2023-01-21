@@ -36,6 +36,7 @@ void ASTUBaseWeapon::LineTrace(FHitResult& HitResult, const FVector& TraceStart,
 {
     FCollisionQueryParams CollisionParams;
     CollisionParams.AddIgnoredActor(GetOwner());
+    CollisionParams.bReturnPhysicalMaterial = true;
 
     const ACharacter* Player = GetPlayer();
 

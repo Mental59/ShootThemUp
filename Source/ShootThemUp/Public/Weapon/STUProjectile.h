@@ -23,6 +23,9 @@ protected:
     UPROPERTY(VisibleAnywhere, Category = "Weapon")
     class UProjectileMovementComponent* MovementComponent;
 
+    UPROPERTY(VisibleAnywhere, Category = "VFX")
+    class USTUWeaponFXComponent* WeaponFXComponent;
+
     UPROPERTY(EditDefaultsOnly, Category = "Weapon")
     float LifeSpan = 5.0f;
 
