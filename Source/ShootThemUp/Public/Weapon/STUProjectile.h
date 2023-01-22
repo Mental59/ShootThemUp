@@ -14,6 +14,9 @@ class SHOOTTHEMUP_API ASTUProjectile : public AActor
 public:
     ASTUProjectile();
 
+    UFUNCTION(BlueprintImplementableEvent, Category = "Weapon")
+    void OnHit();
+
     void SetShotDirection(const FVector& Direction);
 
 protected:
@@ -26,13 +29,16 @@ protected:
     UPROPERTY(VisibleAnywhere, Category = "VFX")
     class USTUWeaponFXComponent* WeaponFXComponent;
 
-    UPROPERTY(EditDefaultsOnly, Category = "Weapon")
+    UPROPERTY(EditDefaultsOnly, Category = "Weapon", meta = (ClampMin = "0.0"))
     float LifeSpan = 5.0f;
 
-    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
+    UPROPERTY(EditDefaultsOnly, Category = "Weapon", meta = (ClampMin = "0.0"))
+    float LifeSpanAfterHit = 1.0f;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon", meta = (ClampMin = "0.0"))
     float DamageRaduis = 300.0f;
 
-    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon", meta = (ClampMin = "0.0"))
     float DamageAmount = 50.0f;
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")

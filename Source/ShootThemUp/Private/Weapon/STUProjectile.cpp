@@ -55,7 +55,8 @@ void ASTUProjectile::OnProjectileHit(
         GetOwnerController(), DoFullDamage);
 
     WeaponFXComponent->PlayImpactFX(Hit);
-    Destroy();
+    OnHit();
+    SetLifeSpan(LifeSpanAfterHit);
 }
 
 AController* ASTUProjectile::GetOwnerController() const
