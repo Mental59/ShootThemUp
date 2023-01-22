@@ -114,7 +114,7 @@ private:
 
     void OnDeath();
 
-    void OnHealthChanged(float Health);
+    void OnHealthChanged(float Health, float HealthDelta);
 
     void TurnCharacter();
 };

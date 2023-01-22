@@ -81,8 +81,10 @@ void USTUHealthComponent::OnAutoHealTimerFired()
 
 void USTUHealthComponent::SetHealth(float NewHealth)
 {
-    Health = FMath::Clamp(NewHealth, 0.0f, MaxHealth);
-    OnHealthChanged.Broadcast(Health);
+    const float NextHealth = FMath::Clamp(NewHealth, 0.0f, MaxHealth);
+    const float HealthDelta = NextHealth - Health;
+    Health = NextHealth;
+    OnHealthChanged.Broadcast(Health, HealthDelta);
 }
 
 void USTUHealthComponent::SetAutoHealTimer()

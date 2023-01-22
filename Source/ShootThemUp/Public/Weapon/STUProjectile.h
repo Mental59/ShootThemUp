@@ -30,7 +30,7 @@ protected:
     float LifeSpan = 5.0f;
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
-    float DamageRaduis = 200.0f;
+    float DamageRaduis = 300.0f;
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
     float DamageAmount = 50.0f;
