@@ -82,6 +82,9 @@ protected:
     UFUNCTION(BlueprintCallable, Category = "Movement")
     bool IsRunning() const;
 
+    UFUNCTION(BlueprintCallable, Category = "Movement")
+    bool ShouldMove() const;
+
     UFUNCTION(BlueprintCallable, Category = "Aim")
     FRotator GetAimOffsets() const;
 
