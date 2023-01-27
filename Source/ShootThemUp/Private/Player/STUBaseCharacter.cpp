@@ -208,8 +208,6 @@ FRotator ASTUBaseCharacter::GetAimOffsets() const
 
 void ASTUBaseCharacter::OnDeath()
 {
-    UE_LOG(LogBaseCharacter, Display, TEXT("Player %s is dead"), *GetName());
-
     // PlayAnimMontage(DeathAnimMontage);
     GetCharacterMovement()->DisableMovement();
     SetLifeSpan(LifeSpanOnDeath);
@@ -246,12 +244,9 @@ void ASTUBaseCharacter::StopFire()
 void ASTUBaseCharacter::OnGroundLanded(const FHitResult& Hit)
 {
     const double FallVelocityZ = -GetVelocity().Z;
-    UE_LOG(LogBaseCharacter, Display, TEXT("On landed: %f"), FallVelocityZ);
 
     if (FallVelocityZ < LandedDamageVelocity.X) return;
 
     const double FinalDamage = FMath::GetMappedRangeValueClamped(LandedDamageVelocity, LandedDamage, FallVelocityZ);
     TakeDamage(FinalDamage, FDamageEvent{}, nullptr, nullptr);
-
-    UE_LOG(LogBaseCharacter, Display, TEXT("Final Damage: %f"), FinalDamage);
 }
