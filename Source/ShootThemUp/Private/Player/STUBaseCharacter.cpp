@@ -42,7 +42,7 @@ ASTUBaseCharacter::ASTUBaseCharacter()
 
     GetCharacterMovement()->bOrientRotationToMovement = false;
     GetCharacterMovement()->bUseControllerDesiredRotation = false;
-    GetCharacterMovement()->RotationRate = FRotator(0.0f, 230.0f, 0.0f);
+    GetCharacterMovement()->RotationRate = FRotator(0.0f, 150.0f, 0.0f);
 }
 
 void ASTUBaseCharacter::BeginPlay()
@@ -75,6 +75,7 @@ void ASTUBaseCharacter::BeginPlay()
 void ASTUBaseCharacter::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
+    TurnCharacter();
 }
 
 void ASTUBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -121,12 +122,6 @@ void ASTUBaseCharacter::Move(const FInputActionValue& Value)
 
     AddMovementInput(ForwardDirection, MovementVector.Y);
     AddMovementInput(RightDirection, MovementVector.X);
-
-    if (!GetVelocity().IsZero())
-    {
-        WantsToTurnRight = WantsToTurnLeft = false;
-        GetCharacterMovement()->bUseControllerDesiredRotation = true;
-    }
 }
 
 void ASTUBaseCharacter::Look(const FInputActionValue& Value)
@@ -137,13 +132,16 @@ void ASTUBaseCharacter::Look(const FInputActionValue& Value)
 
     AddControllerYawInput(LookAxisVector.X);
     AddControllerPitchInput(LookAxisVector.Y);
-
-    TurnCharacter();
 }
 
 void ASTUBaseCharacter::TurnCharacter()
 {
-    if (!GetVelocity().IsZero()) return;
+    if (!GetVelocity().IsZero())
+    {
+        WantsToTurnRight = WantsToTurnLeft = false;
+        GetCharacterMovement()->bUseControllerDesiredRotation = true;
+        return;
+    }
 
     const FRotator AimOffsets = GetAimOffsets();
 
@@ -152,11 +150,19 @@ void ASTUBaseCharacter::TurnCharacter()
         WantsToTurnRight = true;
         GetCharacterMovement()->bUseControllerDesiredRotation = true;
     }
+    else
+    {
+        WantsToTurnRight = false;
+    }
 
     if (AimOffsets.Yaw < -90.0 && !WantsToTurnLeft)
     {
         WantsToTurnLeft = true;
         GetCharacterMovement()->bUseControllerDesiredRotation = true;
+    }
+    else
+    {
+        WantsToTurnLeft = false;
     }
 
     if (FMath::IsNearlyZero(AimOffsets.Yaw, 1.0E-4))
