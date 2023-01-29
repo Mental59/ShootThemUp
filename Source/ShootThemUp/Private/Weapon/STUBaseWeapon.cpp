@@ -25,7 +25,9 @@ void ASTUBaseWeapon::BeginPlay()
 
     check(WeaponMesh);
 
-    CurrentAmmo = DefaultAmmo;
+    CurrentAmmo.IsInfinite = DefaultAmmo.IsInfinite;
+    CurrentAmmo.NumBullets = FMath::Clamp(StartAmmo.NumBullets, 0, DefaultAmmo.NumBullets);
+    CurrentAmmo.NumMagazines = FMath::Clamp(StartAmmo.NumMagazines, 0, DefaultAmmo.NumMagazines);
 }
 
 void ASTUBaseWeapon::StartFire() {}
