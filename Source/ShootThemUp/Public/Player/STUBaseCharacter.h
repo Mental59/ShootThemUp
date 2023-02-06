@@ -13,7 +13,7 @@ class SHOOTTHEMUP_API ASTUBaseCharacter : public ACharacter
     GENERATED_BODY()
 
 public:
-    ASTUBaseCharacter();
+    ASTUBaseCharacter(const FObjectInitializer& ObjInit);
 
 protected:
     UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
@@ -58,9 +58,6 @@ protected:
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
     class UInputAction* ReloadAction;
 
-    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Movement", meta = (ClampMin = "1.5", ClampMax = "10.0"))
-    float RunSpeedModifier = 2.0f;
-
     UPROPERTY(EditDefaultsOnly, Category = "Damage")
     FVector2D LandedDamageVelocity = FVector2D(900.0f, 1200.0f);
 
@@ -79,15 +76,6 @@ protected:
     UPROPERTY(BlueprintReadWrite, Category = "Movement")
     bool WantsToTurnLeft = false;
 
-    UFUNCTION(BlueprintCallable, Category = "Movement")
-    bool IsRunning() const;
-
-    UFUNCTION(BlueprintCallable, Category = "Movement")
-    bool ShouldMove() const;
-
-    UFUNCTION(BlueprintCallable, Category = "Aim")
-    FRotator GetAimOffsets() const;
-
     virtual void BeginPlay() override;
 
     void Move(const FInputActionValue& Value);
@@ -104,6 +92,15 @@ public:
     virtual void Tick(float DeltaTime) override;
 
     virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+    UFUNCTION(BlueprintCallable, Category = "Movement")
+    bool IsRunning() const;
+
+    UFUNCTION(BlueprintCallable, Category = "Movement")
+    bool ShouldMove() const;
+
+    UFUNCTION(BlueprintCallable, Category = "Aim")
+    FRotator GetAimOffsets() const;
 
 private:
     float DefaultWalkSpeed;

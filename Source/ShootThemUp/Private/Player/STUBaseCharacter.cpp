@@ -12,10 +12,12 @@
 #include "Components/STUHealthComponent.h"
 #include "Components/TextRenderComponent.h"
 #include "Components/STUWeaponComponent.h"
+#include "Components/STUCharacterMovementComponent.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogBaseCharacter, All, All);
 
-ASTUBaseCharacter::ASTUBaseCharacter()
+ASTUBaseCharacter::ASTUBaseCharacter(const FObjectInitializer& ObjInit)
+    : Super(ObjInit.SetDefaultSubobjectClass<USTUCharacterMovementComponent>(ACharacter::CharacterMovementComponentName))
 {
     PrimaryActorTick.bCanEverTick = true;
 
@@ -174,20 +176,12 @@ void ASTUBaseCharacter::TurnCharacter()
 
 void ASTUBaseCharacter::Run()
 {
-    if (UCharacterMovementComponent* MovementComponent = GetCharacterMovement())
-    {
-        WantsToRun = true;
-        MovementComponent->MaxWalkSpeed = IsMovingForward ? DefaultWalkSpeed * RunSpeedModifier : DefaultWalkSpeed;
-    }
+    WantsToRun = true;
 }
 
 void ASTUBaseCharacter::StopRunning()
 {
-    if (UCharacterMovementComponent* MovementComponent = GetCharacterMovement())
-    {
-        WantsToRun = false;
-        MovementComponent->MaxWalkSpeed = DefaultWalkSpeed;
-    }
+    WantsToRun = false;
 }
 
 bool ASTUBaseCharacter::IsRunning() const
