@@ -66,7 +66,6 @@ void ASTUBaseCharacter::BeginPlay()
         }
     }
 
-    DefaultWalkSpeed = GetCharacterMovement()->MaxWalkSpeed;
     OnHealthChanged(HealthComponent->GetHealth(), 0.0f);
     HealthComponent->OnDeath.AddUObject(this, &ASTUBaseCharacter::OnDeath);
     HealthComponent->OnHealthChanged.AddUObject(this, &ASTUBaseCharacter::OnHealthChanged);
@@ -193,8 +192,8 @@ bool ASTUBaseCharacter::ShouldMove() const
 {
     const FVector Velocity = GetCharacterMovement()->Velocity;
     const float GroundSpeed = FMath::Sqrt(Velocity.X * Velocity.X + Velocity.Y * Velocity.Y);
-    const FVector Acceleration = GetCharacterMovement()->GetCurrentAcceleration();
-    return !Acceleration.IsZero() && GroundSpeed > 3.0f;
+    // const FVector Acceleration = GetCharacterMovement()->GetCurrentAcceleration();
+    return /*!Acceleration.IsZero() &&*/ GroundSpeed > 3.0f;
 }
 
 FRotator ASTUBaseCharacter::GetAimOffsets() const

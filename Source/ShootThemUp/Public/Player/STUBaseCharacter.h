@@ -103,8 +103,6 @@ public:
     FRotator GetAimOffsets() const;
 
 private:
-    float DefaultWalkSpeed;
-
     bool WantsToRun = false;
 
     bool IsMovingForward = false;
