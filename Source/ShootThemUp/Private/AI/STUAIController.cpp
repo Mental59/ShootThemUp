@@ -5,6 +5,7 @@
 #include "GameFramework/Pawn.h"
 #include "GameFramework/Actor.h"
 #include "Components/STUAIPerceptionComponent.h"
+#include "BehaviorTree/BlackboardComponent.h"
 
 ASTUAIController::ASTUAIController()
 {
@@ -15,7 +16,7 @@ ASTUAIController::ASTUAIController()
 void ASTUAIController::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
-    AActor* AimAtActor = STUAIPerceptionComponent->GetNearestEnemy();
+    AActor* AimAtActor = GetFocusOnActor();
     SetFocus(AimAtActor);
 }
 
@@ -26,4 +27,10 @@ void ASTUAIController::OnPossess(APawn* InPawn)
     {
         RunBehaviorTree(STUCharacter->BehaviorTree);
     }
+}
+
+AActor* ASTUAIController::GetFocusOnActor() const
+{
+    if (!GetBlackboardComponent()) return nullptr;
+    return Cast<AActor>(GetBlackboardComponent()->GetValueAsObject(FocusOnKeyName));
 }
