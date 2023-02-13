@@ -3,7 +3,6 @@
 #include "AI/Services/STUFindEnemyService.h"
 #include "AIController.h"
 #include "BehaviorTree/BlackboardComponent.h"
-#include "STUUtils.h"
 #include "Components/STUAIPerceptionComponent.h"
 
 USTUFindEnemyService::USTUFindEnemyService()

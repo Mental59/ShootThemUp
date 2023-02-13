@@ -58,12 +58,9 @@ void ASTURifleWeapon::PlayAllFX(const FHitResult& HitResult)
 
 bool ASTURifleWeapon::GetCameraTraceData(FVector& TraceStart, FVector& TraceEnd) const
 {
-    const APlayerController* Controller = GetPlayerController();
-    if (!Controller) return false;
-
     FVector ViewLocation;
     FRotator ViewRotation;
-    Controller->GetPlayerViewPoint(ViewLocation, ViewRotation);
+    if (!GetPlayerViewPoint(ViewLocation, ViewRotation)) return false;
 
     TraceStart = ViewLocation;
     const FVector ShootDirection = FMath::VRandCone(ViewRotation.Vector(), FMath::DegreesToRadians(FireSpread));

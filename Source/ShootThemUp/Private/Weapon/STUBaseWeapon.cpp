@@ -64,17 +64,33 @@ void ASTUBaseWeapon::LineTrace(FHitResult& HitResult, const FVector& TraceStart,
 
 bool ASTUBaseWeapon::GetCameraTraceData(FVector& TraceStart, FVector& TraceEnd) const
 {
-    const APlayerController* Controller = GetPlayerController();
-    if (!Controller) return false;
-
     FVector ViewLocation;
     FRotator ViewRotation;
-    Controller->GetPlayerViewPoint(ViewLocation, ViewRotation);
+    if (!GetPlayerViewPoint(ViewLocation, ViewRotation)) return false;
 
     TraceStart = ViewLocation;
     const FVector ShootDirection = ViewRotation.Vector();
     TraceEnd = TraceStart + ShootDirection * TraceMaxDistance;
 
+    return true;
+}
+
+bool ASTUBaseWeapon::GetPlayerViewPoint(FVector& ViewLocation, FRotator& ViewRotation) const
+{
+    const ACharacter* STUCharacter = Cast<ACharacter>(GetOwner());
+    if (!STUCharacter) return false;
+
+    if (STUCharacter->IsPlayerControlled())
+    {
+        const APlayerController* Controller = GetPlayerController();
+        if (!Controller) return false;
+        Controller->GetPlayerViewPoint(ViewLocation, ViewRotation);
+    }
+    else
+    {
+        ViewLocation = GetMuzzleWorldLocation();
+        ViewRotation = WeaponMesh->GetSocketRotation(MuzzleSocketName);
+    }
     return true;
 }
 

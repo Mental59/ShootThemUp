@@ -28,6 +28,7 @@ public:
     const FAmmoData& GetAmmoData() const;
 
     bool TryToAddAmmo(int32 MagazinesAmount);
+    bool IsOutOfAmmo() const;
 
 protected:
     UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
@@ -58,6 +59,8 @@ protected:
 
     virtual void MakeShot();
 
+    virtual bool GetPlayerViewPoint(FVector& ViewLocation, FRotator& ViewRotation) const;
+
     virtual bool GetCameraTraceData(FVector& TraceStart, FVector& TraceEnd) const;
 
     virtual void DrawDebugGeometry(const FHitResult& HitResult) const;
@@ -74,7 +77,6 @@ protected:
 
     void DecreaseAmmo();
 
-    bool IsOutOfAmmo() const;
     bool IsMagazineEmpty() const;
     bool HasMagazines() const;
     bool IsAmmoFull() const;

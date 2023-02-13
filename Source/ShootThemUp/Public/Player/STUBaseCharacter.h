@@ -78,6 +78,8 @@ protected:
 
     virtual void BeginPlay() override;
 
+    virtual void OnDeath();
+
     void Move(const FInputActionValue& Value);
 
     void Look(const FInputActionValue& Value);
@@ -109,8 +111,6 @@ private:
 
     UFUNCTION()
     void OnGroundLanded(const FHitResult& Hit);
-
-    void OnDeath();
 
     void OnHealthChanged(float Health, float HealthDelta);
 
