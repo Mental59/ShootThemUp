@@ -34,11 +34,13 @@ protected:
 
 public:
     virtual void Tick(float DeltaTime) override;
+    bool CouldBeTaken() const;
 
 private:
     UPROPERTY()
     TArray<class APawn*> OverlappingPawns;
 
+    FTimerHandle RespawnTimerHandle;
     float RotationYaw = 0.0f;
 
     void PickupWasTaken();

@@ -69,6 +69,11 @@ void ASTUBasePickup::Tick(float DeltaTime)
     }
 }
 
+bool ASTUBasePickup::CouldBeTaken() const
+{
+    return !GetWorldTimerManager().IsTimerActive(RespawnTimerHandle);
+}
+
 void ASTUBasePickup::PickupWasTaken()
 {
     if (GetRootComponent())
@@ -77,7 +82,6 @@ void ASTUBasePickup::PickupWasTaken()
     }
     CollisionComponent->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
 
-    FTimerHandle RespawnTimerHandle;
     GetWorldTimerManager().SetTimer(RespawnTimerHandle, this, &ASTUBasePickup::Respawn, RespawnTime);
 }
 

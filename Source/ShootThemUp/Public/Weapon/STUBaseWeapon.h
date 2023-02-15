@@ -29,6 +29,7 @@ public:
 
     bool TryToAddAmmo(int32 MagazinesAmount);
     bool IsOutOfAmmo() const;
+    bool IsAmmoFull() const;
 
 protected:
     UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
@@ -79,7 +80,6 @@ protected:
 
     bool IsMagazineEmpty() const;
     bool HasMagazines() const;
-    bool IsAmmoFull() const;
 
     void LogAmmo();
 

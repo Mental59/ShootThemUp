@@ -24,6 +24,7 @@ public:
     bool GetAmmoData(FAmmoData& AmmoData) const;
 
     bool TryToAddAmmo(TSubclassOf<class ASTUBaseWeapon> WeaponType, int32 MagazinesAmount);
+    bool NeedAmmo(TSubclassOf<class ASTUBaseWeapon> WeaponType) const;
 
 protected:
     UPROPERTY(EditDefaultsOnly, Category = "Weapon")
