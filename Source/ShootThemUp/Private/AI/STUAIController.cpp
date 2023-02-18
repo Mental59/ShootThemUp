@@ -11,6 +11,8 @@ ASTUAIController::ASTUAIController()
 {
     STUAIPerceptionComponent = CreateDefaultSubobject<USTUAIPerceptionComponent>("PerceptionComponent");
     SetPerceptionComponent(*STUAIPerceptionComponent);
+
+    bWantsPlayerState = true;
 }
 
 void ASTUAIController::Tick(float DeltaTime)
