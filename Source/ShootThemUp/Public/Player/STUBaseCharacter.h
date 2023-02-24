@@ -76,6 +76,10 @@ protected:
     UPROPERTY(BlueprintReadWrite, Category = "Movement")
     bool WantsToTurnLeft = false;
 
+    UFUNCTION()
+    void OnTakeDamage(
+        AActor* DamagedActor, float Damage, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser);
+
     virtual void BeginPlay() override;
 
     virtual void OnDeath();

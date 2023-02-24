@@ -6,7 +6,6 @@
 #include "AIController.h"
 #include "STUUtils.h"
 #include "Components/STUHealthComponent.h"
-#include "Perception/AISense_Sight.h"
 
 AActor* USTUAIPerceptionComponent::GetNearestEnemy() const
 {
@@ -16,12 +15,12 @@ AActor* USTUAIPerceptionComponent::GetNearestEnemy() const
     const APawn* Pawn = Controller->GetPawn();
     if (!Pawn) return nullptr;
 
-    TArray<AActor*> PerceiveActors;
-    GetCurrentlyPerceivedActors(UAISense_Sight::StaticClass(), PerceiveActors);
+    TArray<AActor*> PerceivedActors;
+    GetCurrentlyPerceivedActors(nullptr, PerceivedActors);
 
     float TheNearestActorDistance = MAX_FLT;
     AActor* TheNearestActor = nullptr;
-    for (AActor* const Actor : PerceiveActors)
+    for (AActor* const Actor : PerceivedActors)
     {
         const USTUHealthComponent* HealthComponent = Actor->FindComponentByClass<USTUHealthComponent>();
         if (HealthComponent && !HealthComponent->IsDead())  // TODO: check if it's an enemy
