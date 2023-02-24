@@ -17,5 +17,5 @@ bool USTUNeedAmmoDecorator::CalculateRawConditionValue(UBehaviorTreeComponent& O
     const USTUAIWeaponComponent* WeaponComponent = Controller->GetPawn()->FindComponentByClass<USTUAIWeaponComponent>();
     if (!WeaponComponent) return false;
 
-    return WeaponComponent->NeedAmmo(WeaponType);
+    return WeaponComponent->NeedAmmo(WeaponType, NeedFullAmmo);
 }

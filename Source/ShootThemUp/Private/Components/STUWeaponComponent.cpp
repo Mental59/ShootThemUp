@@ -208,13 +208,13 @@ bool USTUWeaponComponent::TryToAddAmmo(TSubclassOf<class ASTUBaseWeapon> WeaponT
     return false;
 }
 
-bool USTUWeaponComponent::NeedAmmo(TSubclassOf<class ASTUBaseWeapon> WeaponType) const
+bool USTUWeaponComponent::NeedAmmo(TSubclassOf<class ASTUBaseWeapon> WeaponType, bool NeedFullAmmo) const
 {
     for (ASTUBaseWeapon* Weapon : Weapons)
     {
         if (Weapon && Weapon->IsA(WeaponType))
         {
-            return !Weapon->IsAmmoFull();
+            return NeedFullAmmo ? !Weapon->IsAmmoFull() : Weapon->IsOutOfAmmo();
         }
     }
     return false;
