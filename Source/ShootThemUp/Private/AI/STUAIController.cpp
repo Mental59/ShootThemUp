@@ -18,8 +18,6 @@ ASTUAIController::ASTUAIController()
 void ASTUAIController::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
-    AActor* AimAtActor = GetFocusOnActor();
-    SetFocus(AimAtActor);
 }
 
 void ASTUAIController::OnPossess(APawn* InPawn)
