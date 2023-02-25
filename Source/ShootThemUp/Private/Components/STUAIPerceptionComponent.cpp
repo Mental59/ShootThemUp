@@ -20,16 +20,20 @@ AActor* USTUAIPerceptionComponent::GetNearestEnemy() const
 
     float TheNearestActorDistance = MAX_FLT;
     AActor* TheNearestActor = nullptr;
-    for (AActor* const Actor : PerceivedActors)
+    for (AActor* const PerceivedActor : PerceivedActors)
     {
-        const USTUHealthComponent* HealthComponent = Actor->FindComponentByClass<USTUHealthComponent>();
-        if (HealthComponent && !HealthComponent->IsDead())  // TODO: check if it's an enemy
+        const USTUHealthComponent* HealthComponent = PerceivedActor->FindComponentByClass<USTUHealthComponent>();
+
+        const APawn* PerceivedPawn = Cast<APawn>(PerceivedActor);
+        bool AreEnemies = PerceivedPawn && STUUtils::AreEnemies(Controller, PerceivedPawn->GetController());
+
+        if (HealthComponent && !HealthComponent->IsDead() && AreEnemies)
         {
-            const double CurrentDistance = (Actor->GetActorLocation() - Pawn->GetActorLocation()).Size();
+            const double CurrentDistance = (PerceivedActor->GetActorLocation() - Pawn->GetActorLocation()).Size();
             if (CurrentDistance < TheNearestActorDistance)
             {
                 TheNearestActorDistance = CurrentDistance;
-                TheNearestActor = Actor;
+                TheNearestActor = PerceivedActor;
             }
         }
     }

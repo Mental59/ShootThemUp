@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Player/STUPlayerState.h"
+
 class STUUtils
 {
 public:
@@ -8,5 +10,15 @@ public:
     {
         if (!Actor) return nullptr;
         return Cast<T>(Actor->GetComponentByClass(T::StaticClass()));
+    }
+
+    bool static AreEnemies(const AController* Controller1, const AController* Controller2)
+    {
+        if (!Controller1 || !Controller2 || Controller1 == Controller2) return false;
+
+        const ASTUPlayerState* PlayerState1 = Cast<ASTUPlayerState>(Controller1->PlayerState);
+        const ASTUPlayerState* PlayerState2 = Cast<ASTUPlayerState>(Controller2->PlayerState);
+
+        return PlayerState1 && PlayerState2 && PlayerState1->GetTeamID() != PlayerState2->GetTeamID();
     }
 };

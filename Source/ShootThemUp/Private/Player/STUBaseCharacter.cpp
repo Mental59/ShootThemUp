@@ -48,6 +48,15 @@ ASTUBaseCharacter::ASTUBaseCharacter(const FObjectInitializer& ObjInit)
     GetCharacterMovement()->RotationRate = FRotator(0.0f, 150.0f, 0.0f);
 }
 
+void ASTUBaseCharacter::SetPlayerColor(const FLinearColor& PlayerColor)
+{
+
+    if (UMaterialInstanceDynamic* MaterialInstance = GetMesh()->CreateAndSetMaterialInstanceDynamic(0))
+    {
+        MaterialInstance->SetVectorParameterValue(MaterialColorName, PlayerColor);
+    }
+}
+
 void ASTUBaseCharacter::BeginPlay()
 {
     Super::BeginPlay();

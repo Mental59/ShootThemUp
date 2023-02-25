@@ -15,6 +15,21 @@ class SHOOTTHEMUP_API ASTUBaseCharacter : public ACharacter
 public:
     ASTUBaseCharacter(const FObjectInitializer& ObjInit);
 
+    virtual void Tick(float DeltaTime) override;
+
+    virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+    UFUNCTION(BlueprintCallable, Category = "Movement")
+    bool IsRunning() const;
+
+    UFUNCTION(BlueprintCallable, Category = "Movement")
+    bool ShouldMove() const;
+
+    UFUNCTION(BlueprintCallable, Category = "Aim")
+    FRotator GetAimOffsets() const;
+
+    void SetPlayerColor(const FLinearColor& PlayerColor);
+
 protected:
     UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
     class USpringArmComponent* SpringArmComponent;
@@ -67,6 +82,9 @@ protected:
     UPROPERTY(EditDefaultsOnly, Category = "Damage")
     float LifeSpanOnDeath = 5.0f;
 
+    UPROPERTY(EditDefaultsOnly, Category = "Material")
+    FName MaterialColorName = "Paint Color";
+
     UPROPERTY(BlueprintReadWrite, Category = "Movement")
     bool CanMove = true;
 
@@ -93,20 +111,6 @@ protected:
 
     void StartFire();
     void StopFire();
-
-public:
-    virtual void Tick(float DeltaTime) override;
-
-    virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
-    UFUNCTION(BlueprintCallable, Category = "Movement")
-    bool IsRunning() const;
-
-    UFUNCTION(BlueprintCallable, Category = "Movement")
-    bool ShouldMove() const;
-
-    UFUNCTION(BlueprintCallable, Category = "Aim")
-    FRotator GetAimOffsets() const;
 
 private:
     bool WantsToRun = false;

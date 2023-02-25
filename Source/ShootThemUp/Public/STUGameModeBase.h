@@ -16,7 +16,7 @@ public:
     ASTUGameModeBase();
 
     virtual void StartPlay() override;
-    UClass* GetDefaultPawnClassForController_Implementation(AController* InController);
+    UClass* GetDefaultPawnClassForController_Implementation(class AController* InController);
 
 protected:
     UPROPERTY(EditDefaultsOnly, Category = "Game")
@@ -36,6 +36,11 @@ private:
     void SpawnBots();
     void StartRound();
     void UpdateGameTimer();
+
     void ResetPlayers();
     void ResetOnePlayer(class AController* InController);
+
+    void CreateTeamsInfo();
+    const FLinearColor& GetColorByTeamID(int32 TeamID) const;
+    void SetPlayerColor(class AController* Controller);
 };
