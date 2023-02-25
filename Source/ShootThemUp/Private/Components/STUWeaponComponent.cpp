@@ -150,18 +150,22 @@ void USTUWeaponComponent::OnReloadFinished(USkeletalMeshComponent* MeshComp)
     if (!Character || Character->GetMesh() != MeshComp) return;
 
     ReloadAnimInProgress = false;
+    if (WantsToFire && CurrentWeapon)
+    {
+        CurrentWeapon->StartFire();
+    }
 }
 
 void USTUWeaponComponent::StartFire()
 {
-    if (!CanFire()) return;
-    CurrentWeapon->StartFire();
+    WantsToFire = true;
+    if (CanFire()) CurrentWeapon->StartFire();
 }
 
 void USTUWeaponComponent::StopFire()
 {
-    if (!CurrentWeapon) return;
-    CurrentWeapon->StopFire();
+    WantsToFire = false;
+    if (CurrentWeapon) CurrentWeapon->StopFire();
 }
 
 void USTUWeaponComponent::NextWeapon()

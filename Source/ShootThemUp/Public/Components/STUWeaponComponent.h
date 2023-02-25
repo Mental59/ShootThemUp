@@ -63,6 +63,7 @@ private:
 
     bool EqiupAnimInProgress = false;
     bool ReloadAnimInProgress = false;
+    bool WantsToFire = false;
 
     void SpawnWeapons();
     void AttachWeaponToSocket(class ASTUBaseWeapon* Weapon, class USceneComponent* SceneComponent, const FName& SocketName);
