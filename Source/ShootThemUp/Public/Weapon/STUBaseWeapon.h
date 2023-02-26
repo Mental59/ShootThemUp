@@ -30,6 +30,8 @@ public:
     bool TryToAddAmmo(int32 MagazinesAmount);
     bool IsOutOfAmmo() const;
     bool IsAmmoFull() const;
+    bool IsMagazineEmpty() const;
+    bool HasMagazines() const;
 
 protected:
     UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
@@ -77,9 +79,6 @@ protected:
     FVector GetMuzzleWorldLocation() const;
 
     void DecreaseAmmo();
-
-    bool IsMagazineEmpty() const;
-    bool HasMagazines() const;
 
     void LogAmmo();
 

@@ -212,7 +212,8 @@ bool ASTUBaseWeapon::HasMagazines() const
 
 bool ASTUBaseWeapon::IsAmmoFull() const
 {
-    return CurrentAmmo.NumMagazines == DefaultAmmo.NumMagazines && CurrentAmmo.NumBullets == DefaultAmmo.NumBullets;
+    return CurrentAmmo.NumMagazines == DefaultAmmo.NumMagazines && CurrentAmmo.NumBullets == DefaultAmmo.NumBullets ||
+           CurrentAmmo.NumMagazines > DefaultAmmo.NumMagazines;
 }
 
 void ASTUBaseWeapon::LogAmmo()

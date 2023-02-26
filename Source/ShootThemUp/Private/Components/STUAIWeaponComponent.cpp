@@ -19,7 +19,7 @@ void USTUAIWeaponComponent::StartFire()
 
 void USTUAIWeaponComponent::NextWeapon()
 {
-    if (!CanEquip()) return;
+    if (!CanEquip() && !ReloadAnimInProgress) return;
 
     int32 NextIndex = (CurrentWeaponIndex + 1) % Weapons.Num();
     while (NextIndex != CurrentWeaponIndex)

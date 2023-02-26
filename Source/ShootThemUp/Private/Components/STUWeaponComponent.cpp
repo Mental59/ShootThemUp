@@ -99,6 +99,7 @@ void USTUWeaponComponent::EquipWeapon(int32 WeaponIndex)
 
     AttachWeaponToSocket(CurrentWeapon, Character->GetMesh(), WeaponEquipSocketName);
     EqiupAnimInProgress = true;
+    ReloadAnimInProgress = false;
     PlayAnimMontage(EquipAnimMontage);
 }
 
@@ -142,14 +143,27 @@ void USTUWeaponComponent::OnEquipFinished(class USkeletalMeshComponent* MeshComp
     if (!Character || Character->GetMesh() != MeshComp) return;
 
     EqiupAnimInProgress = false;
+    if (CurrentWeapon && CurrentWeapon->IsMagazineEmpty())
+    {
+        ReloadWeapon();
+    }
+    else if (CurrentWeapon && WantsToFire)
+    {
+        CurrentWeapon->StartFire();
+    }
 }
 
 void USTUWeaponComponent::OnReloadFinished(USkeletalMeshComponent* MeshComp)
 {
+    UE_LOG(LogWeaponComponent, Display, TEXT("OnReloadFinished"));
+
     ACharacter* Character = GetCharacter();
     if (!Character || Character->GetMesh() != MeshComp) return;
 
+    if (CurrentWeapon) CurrentWeapon->ChangeMagazine();
+
     ReloadAnimInProgress = false;
+
     if (WantsToFire && CurrentWeapon)
     {
         CurrentWeapon->StartFire();
@@ -242,19 +256,18 @@ void USTUWeaponComponent::ChangeMagazine()
 {
     if (!CanReload()) return;
     CurrentWeapon->StopFire();
-    CurrentWeapon->ChangeMagazine();
     ReloadAnimInProgress = true;
     PlayAnimMontage(CurrentReloadAnimMontage);
 }
 
 bool USTUWeaponComponent::CanFire() const
 {
-    return CurrentWeapon && !EqiupAnimInProgress && !ReloadAnimInProgress;
+    return CurrentWeapon && !EqiupAnimInProgress && !ReloadAnimInProgress && !CurrentWeapon->IsMagazineEmpty();
 }
 
 bool USTUWeaponComponent::CanEquip() const
 {
-    return !EqiupAnimInProgress && !ReloadAnimInProgress;
+    return !EqiupAnimInProgress;
 }
 
 bool USTUWeaponComponent::CanReload() const

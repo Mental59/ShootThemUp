@@ -46,6 +46,9 @@ protected:
     TArray<class ASTUBaseWeapon*> Weapons;
 
     int32 CurrentWeaponIndex = 0;
+    bool EqiupAnimInProgress = false;
+    bool ReloadAnimInProgress = false;
+    bool WantsToFire = false;
 
     virtual void BeginPlay() override;
     virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
@@ -60,10 +63,6 @@ protected:
 private:
     UPROPERTY()
     class UAnimMontage* CurrentReloadAnimMontage = nullptr;
-
-    bool EqiupAnimInProgress = false;
-    bool ReloadAnimInProgress = false;
-    bool WantsToFire = false;
 
     void SpawnWeapons();
     void AttachWeaponToSocket(class ASTUBaseWeapon* Weapon, class USceneComponent* SceneComponent, const FName& SocketName);
