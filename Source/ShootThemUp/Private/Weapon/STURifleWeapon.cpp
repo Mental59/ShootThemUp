@@ -75,11 +75,9 @@ void ASTURifleWeapon::MakeDamageToActor(const FHitResult& HitResult)
     if (HitResult.bBlockingHit)
     {
         AActor* DamagedActor = HitResult.GetActor();
-        if (!DamagedActor) return;
-        if (AController* Controller = GetPlayer()->GetController())
-        {
-            DamagedActor->TakeDamage(DamageAmount, FDamageEvent(), Controller, this);
-        }
+        ACharacter* Player = GetPlayer();
+        if (!DamagedActor || !Player) return;
+        DamagedActor->TakeDamage(DamageAmount, FDamageEvent(), Player->GetController(), this);
     }
 }
 
