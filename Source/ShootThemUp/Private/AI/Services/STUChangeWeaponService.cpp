@@ -14,10 +14,12 @@ void USTUChangeWeaponService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8*
 {
     if (const AAIController* Controller = OwnerComp.GetAIOwner())
     {
-        USTUWeaponComponent* WeaponComponent = Controller->GetPawn()->FindComponentByClass<USTUWeaponComponent>();
-        if (WeaponComponent && Probability > 0 && FMath::FRand() <= Probability)
+        if (USTUWeaponComponent* WeaponComponent = Controller->GetPawn()->FindComponentByClass<USTUWeaponComponent>())
         {
-            WeaponComponent->NextWeapon();
+            if (Probability > 0 && FMath::FRand() <= Probability || WeaponComponent->IsOutOfAmmo())
+            {
+                WeaponComponent->NextWeapon();
+            }
         }
     }
 

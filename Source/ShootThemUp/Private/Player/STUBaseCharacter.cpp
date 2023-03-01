@@ -13,7 +13,6 @@
 #include "Components/TextRenderComponent.h"
 #include "Components/STUWeaponComponent.h"
 #include "Components/STUCharacterMovementComponent.h"
-#include "Perception/AISense_Damage.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogBaseCharacter, All, All);
 
@@ -80,18 +79,7 @@ void ASTUBaseCharacter::BeginPlay()
     HealthComponent->OnDeath.AddUObject(this, &ASTUBaseCharacter::OnDeath);
     HealthComponent->OnHealthChanged.AddUObject(this, &ASTUBaseCharacter::OnHealthChanged);
 
-    OnTakeAnyDamage.AddDynamic(this, &ASTUBaseCharacter::OnTakeDamage);
     LandedDelegate.AddDynamic(this, &ASTUBaseCharacter::OnGroundLanded);
-}
-
-void ASTUBaseCharacter::OnTakeDamage(
-    AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser)
-{
-    if (GetWorld() && InstigatedBy && InstigatedBy->GetPawn())
-    {
-        UAISense_Damage::ReportDamageEvent(
-            GetWorld(), DamagedActor, InstigatedBy->GetPawn(), Damage, InstigatedBy->GetPawn()->GetActorLocation(), FVector());
-    }
 }
 
 void ASTUBaseCharacter::Tick(float DeltaTime)
@@ -213,8 +201,7 @@ bool ASTUBaseCharacter::ShouldMove() const
 {
     const FVector Velocity = GetCharacterMovement()->Velocity;
     const float GroundSpeed = FMath::Sqrt(Velocity.X * Velocity.X + Velocity.Y * Velocity.Y);
-    // const FVector Acceleration = GetCharacterMovement()->GetCurrentAcceleration();
-    return /*!Acceleration.IsZero() &&*/ GroundSpeed > 3.0f;
+    return GroundSpeed > 3.0f;
 }
 
 FRotator ASTUBaseCharacter::GetAimOffsets() const

@@ -238,6 +238,12 @@ bool USTUWeaponComponent::NeedAmmo(TSubclassOf<class ASTUBaseWeapon> WeaponType,
     return false;
 }
 
+bool USTUWeaponComponent::IsOutOfAmmo() const
+{
+    if (CurrentWeapon) return CurrentWeapon->IsOutOfAmmo();
+    return false;
+}
+
 void USTUWeaponComponent::OnMagazineEmpty(ASTUBaseWeapon* EmptyWeapon)
 {
     if (!EmptyWeapon) return;

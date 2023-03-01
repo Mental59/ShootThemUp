@@ -8,6 +8,7 @@
 #include "TimerManager.h"
 #include "Camera/CameraShakeBase.h"
 #include "STUUtils.h"
+#include "Perception/AISense_Damage.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogHealthComponent, All, All);
 
@@ -42,8 +43,7 @@ void USTUHealthComponent::BeginPlay()
 
     SetHealth(MaxHealth);
 
-    AActor* ComponentOwner = GetOwner();
-    if (ComponentOwner)
+    if (AActor* ComponentOwner = GetOwner())
     {
         ComponentOwner->OnTakeAnyDamage.AddDynamic(this, &USTUHealthComponent::OnTakeAnyDamage);
     }
@@ -53,7 +53,7 @@ void USTUHealthComponent::OnTakeAnyDamage(
     AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser)
 {
     if (Damage <= 0.0f || IsDead()) return;
-    
+
     if (const APawn* DamagedPawn = Cast<APawn>(DamagedActor))
     {
         if (!STUUtils::AreEnemies(DamagedPawn->GetController(), InstigatedBy)) return;
@@ -73,6 +73,7 @@ void USTUHealthComponent::OnTakeAnyDamage(
     }
 
     PlayCameraShake();
+    ReportDamageEvent(Damage, InstigatedBy);
 }
 
 void USTUHealthComponent::OnAutoHealTimerFired()
@@ -119,4 +120,13 @@ void USTUHealthComponent::PlayCameraShake()
     if (!Controller || !Controller->PlayerCameraManager) return;
 
     Controller->PlayerCameraManager->StartCameraShake(CameraShake);
+}
+
+void USTUHealthComponent::ReportDamageEvent(float Damage, AController* InstigatedBy)
+{
+    if (GetWorld() && InstigatedBy && GetOwner() && InstigatedBy->GetPawn())
+    {
+        UAISense_Damage::ReportDamageEvent(GetWorld(), GetOwner(), InstigatedBy->GetPawn(), Damage,
+            InstigatedBy->GetPawn()->GetActorLocation(), GetOwner()->GetActorLocation());
+    }
 }

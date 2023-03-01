@@ -65,4 +65,5 @@ private:
     void ClearAutoHealTimer();
 
     void PlayCameraShake();
+    void ReportDamageEvent(float Damage, class AController* InstigatedBy);
 };

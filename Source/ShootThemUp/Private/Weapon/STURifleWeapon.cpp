@@ -6,6 +6,7 @@
 #include "Weapon/Components/STUWeaponFXComponent.h"
 #include "NiagaraFunctionLibrary.h"
 #include "NiagaraComponent.h"
+#include "GameFramework/Character.h"
 
 ASTURifleWeapon::ASTURifleWeapon()
 {
@@ -75,7 +76,10 @@ void ASTURifleWeapon::MakeDamageToActor(const FHitResult& HitResult)
     {
         AActor* DamagedActor = HitResult.GetActor();
         if (!DamagedActor) return;
-        DamagedActor->TakeDamage(DamageAmount, FDamageEvent(), GetPlayerController(), this);
+        if (AController* Controller = GetPlayer()->GetController())
+        {
+            DamagedActor->TakeDamage(DamageAmount, FDamageEvent(), Controller, this);
+        }
     }
 }
 
