@@ -9,6 +9,7 @@
 #include "Camera/CameraShakeBase.h"
 #include "STUUtils.h"
 #include "Perception/AISense_Damage.h"
+#include "STUGameModeBase.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogHealthComponent, All, All);
 
@@ -65,6 +66,7 @@ void USTUHealthComponent::OnTakeAnyDamage(
 
     if (IsDead())
     {
+        KilledBy(InstigatedBy);
         OnDeath.Broadcast();
     }
     else if (AutoHeal)
@@ -128,5 +130,16 @@ void USTUHealthComponent::ReportDamageEvent(float Damage, AController* Instigate
     {
         UAISense_Damage::ReportDamageEvent(GetWorld(), GetOwner(), InstigatedBy->GetPawn(), Damage,
             InstigatedBy->GetPawn()->GetActorLocation(), GetOwner()->GetActorLocation());
+    }
+}
+
+void USTUHealthComponent::KilledBy(AController* KillerController)
+{
+    if (!GetWorld()) return;
+    if (ASTUGameModeBase* GameMode = Cast<ASTUGameModeBase>(GetWorld()->GetAuthGameMode()))
+    {
+        APawn* PlayerPawn = Cast<APawn>(GetOwner());
+        AController* VictimController = PlayerPawn ? PlayerPawn->Controller : nullptr;
+        GameMode->Killed(KillerController, VictimController);
     }
 }

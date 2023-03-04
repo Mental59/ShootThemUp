@@ -77,12 +77,12 @@ bool ASTUBaseWeapon::GetCameraTraceData(FVector& TraceStart, FVector& TraceEnd) 
 
 bool ASTUBaseWeapon::GetPlayerViewPoint(FVector& ViewLocation, FRotator& ViewRotation) const
 {
-    const ACharacter* STUCharacter = Cast<ACharacter>(GetOwner());
+    const ACharacter* STUCharacter = GetPlayer();
     if (!STUCharacter) return false;
 
     if (STUCharacter->IsPlayerControlled())
     {
-        const APlayerController* Controller = GetPlayerController();
+        const APlayerController* Controller = STUCharacter->GetController<APlayerController>();
         if (!Controller) return false;
         Controller->GetPlayerViewPoint(ViewLocation, ViewRotation);
     }
@@ -107,14 +107,6 @@ void ASTUBaseWeapon::DrawDebugGeometry(const FHitResult& HitResult) const
     DrawDebugLine(GetWorld(), GetMuzzleWorldLocation(), HitResult.bBlockingHit ? HitResult.ImpactPoint : HitResult.TraceEnd, FColor::Red,
         false, 3.0f, 0, 3.0f);
     if (HitResult.bBlockingHit) DrawDebugSphere(GetWorld(), HitResult.ImpactPoint, 10.0f, 24, FColor::Red, false, 5.0f);
-}
-
-APlayerController* ASTUBaseWeapon::GetPlayerController() const
-{
-    ACharacter* Player = GetPlayer();
-    if (!Player) return nullptr;
-
-    return Player->GetController<APlayerController>();
 }
 
 ACharacter* ASTUBaseWeapon::GetPlayer() const

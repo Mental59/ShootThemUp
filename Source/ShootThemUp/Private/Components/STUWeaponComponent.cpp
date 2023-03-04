@@ -155,8 +155,6 @@ void USTUWeaponComponent::OnEquipFinished(class USkeletalMeshComponent* MeshComp
 
 void USTUWeaponComponent::OnReloadFinished(USkeletalMeshComponent* MeshComp)
 {
-    UE_LOG(LogWeaponComponent, Display, TEXT("OnReloadFinished"));
-
     ACharacter* Character = GetCharacter();
     if (!Character || Character->GetMesh() != MeshComp) return;
 

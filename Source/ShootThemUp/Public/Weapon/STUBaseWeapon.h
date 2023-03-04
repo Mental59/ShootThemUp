@@ -72,8 +72,6 @@ protected:
 
     float GetAngleBetweenPlayerAndTrace(const FVector& ImpactPoint, const ACharacter* Player) const;
 
-    APlayerController* GetPlayerController() const;
-
     ACharacter* GetPlayer() const;
 
     FVector GetMuzzleWorldLocation() const;

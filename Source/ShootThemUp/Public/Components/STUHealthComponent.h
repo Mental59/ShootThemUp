@@ -66,4 +66,6 @@ private:
 
     void PlayCameraShake();
     void ReportDamageEvent(float Damage, class AController* InstigatedBy);
+
+    void KilledBy(class AController* KillerController);
 };
