@@ -7,6 +7,7 @@
 #include "GameFramework/Controller.h"
 #include "AIController.h"
 #include "Player/STUPlayerState.h"
+#include "Components/STURespawnComponent.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogSTUGameModeBase, All, All);
 
@@ -52,6 +53,8 @@ void ASTUGameModeBase::Killed(AController* KillerController, AController* Victim
     {
         VictimPlayerState->AddDeath();
     }
+
+    StartRespawn(VictimController);
 }
 
 FRoundInfo ASTUGameModeBase::GetRoundInfo() const
@@ -63,6 +66,11 @@ FRoundInfo ASTUGameModeBase::GetRoundInfo() const
     RoundInfo.SecondsLeft = RoundCountDown;
 
     return RoundInfo;
+}
+
+void ASTUGameModeBase::RequestPlayerRespawn(AController* PlayerController)
+{
+    ResetOnePlayer(PlayerController);
 }
 
 void ASTUGameModeBase::SpawnBots()
@@ -181,5 +189,16 @@ void ASTUGameModeBase::LogPlayerInfo()
         {
             PlayerState->LogInfo();
         }
+    }
+}
+
+void ASTUGameModeBase::StartRespawn(AController* PlayerController)
+{
+    bool IsRespawnAvailable = (float)RoundCountDown > (float)MinRoundTimeForRespawn + GameData.RespawnTimeSeconds;
+    if (!IsRespawnAvailable) return;
+
+    if (USTURespawnComponent* RespawnComponent = PlayerController->FindComponentByClass<USTURespawnComponent>())
+    {
+        RespawnComponent->Respawn(GameData.RespawnTimeSeconds);
     }
 }

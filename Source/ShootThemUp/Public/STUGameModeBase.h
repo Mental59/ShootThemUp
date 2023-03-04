@@ -22,12 +22,17 @@ public:
 
     FRoundInfo GetRoundInfo() const;
 
+    void RequestPlayerRespawn(class AController* PlayerController);
+
 protected:
     UPROPERTY(EditDefaultsOnly, Category = "Game")
     TSubclassOf<class AAIController> AIControllerClass;
 
     UPROPERTY(EditDefaultsOnly, Category = "Game")
     TSubclassOf<class APawn> AIPawnClass;
+
+    UPROPERTY(EditDefaultsOnly, Category = "Game")
+    int32 MinRoundTimeForRespawn = 3;
 
     UPROPERTY(EditDefaultsOnly, Category = "Game")
     FGameData GameData;
@@ -49,4 +54,5 @@ private:
     void SetPlayerColor(class AController* Controller);
 
     void LogPlayerInfo();
+    void StartRespawn(class AController* PlayerController);
 };
