@@ -23,6 +23,9 @@ protected:
     UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
     class UCameraComponent* CameraComponent;
 
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
+    class USphereComponent* CameraCollisionComponent;
+
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
     class UInputMappingContext* DefaultMappingContext;
 
@@ -46,6 +49,16 @@ protected:
 
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
     class UInputAction* ReloadAction;
+
+    UFUNCTION()
+    void OnCameraCollisionBeginOverlap(class UPrimitiveComponent* OverlappedComponent, class AActor* OtherActor,
+        class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const struct FHitResult& SweepResult);
+
+    UFUNCTION()
+    void OnCameraCollisionEndOverlap(class UPrimitiveComponent* OverlappedComponent, class AActor* OtherActor,
+        class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+
+    void CheckCameraOverlap();
 
     virtual void BeginPlay() override;
 
