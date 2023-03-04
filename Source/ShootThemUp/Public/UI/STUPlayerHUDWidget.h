@@ -33,6 +33,9 @@ public:
 
     virtual bool Initialize() override;
 
+protected:
+    void OnNewPawn(class APawn* NewPawn);
+
 private:
     template <typename T>
     T* GetComponent() const;

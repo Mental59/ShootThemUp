@@ -6,6 +6,29 @@
 #include "Player/STUPlayerState.h"
 #include "STUGameModeBase.h"
 
+bool USTUPlayerHUDWidget::Initialize()
+{
+    if (APlayerController* PlayerController = GetOwningPlayer())
+    {
+        PlayerController->GetOnNewPawnNotifier().AddUObject(this, &USTUPlayerHUDWidget::OnNewPawn);
+        OnNewPawn(GetOwningPlayerPawn());
+    }
+
+    return Super::Initialize();
+}
+
+void USTUPlayerHUDWidget::OnNewPawn(APawn* NewPawn)
+{
+    if (NewPawn)
+    {
+        USTUHealthComponent* HealthComponent = NewPawn->FindComponentByClass<USTUHealthComponent>();
+        if (HealthComponent)
+        {
+            HealthComponent->OnHealthChanged.AddUObject(this, &USTUPlayerHUDWidget::OnHealthChanged);
+        }
+    }
+}
+
 float USTUPlayerHUDWidget::GetHealthPercent() const
 {
     USTUHealthComponent* HealthComponent = GetComponent<USTUHealthComponent>();
@@ -40,17 +63,6 @@ bool USTUPlayerHUDWidget::IsPlayerSpectating() const
 {
     const APlayerController* Controller = GetOwningPlayer();
     return Controller && Controller->GetStateName() == NAME_Spectating;
-}
-
-bool USTUPlayerHUDWidget::Initialize()
-{
-    USTUHealthComponent* HealthComponent = GetComponent<USTUHealthComponent>();
-    if (HealthComponent)
-    {
-        HealthComponent->OnHealthChanged.AddUObject(this, &USTUPlayerHUDWidget::OnHealthChanged);
-    }
-
-    return Super::Initialize();
 }
 
 void USTUPlayerHUDWidget::OnHealthChanged(float Health, float HealthDelta)

@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-#include "InputActionValue.h"
 #include "STUBaseCharacter.generated.h"
 
 UCLASS()
@@ -17,10 +16,8 @@ public:
 
     virtual void Tick(float DeltaTime) override;
 
-    virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
     UFUNCTION(BlueprintCallable, Category = "Movement")
-    bool IsRunning() const;
+    virtual bool IsRunning() const;
 
     UFUNCTION(BlueprintCallable, Category = "Movement")
     bool ShouldMove() const;
@@ -32,46 +29,13 @@ public:
 
 protected:
     UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
-    class USpringArmComponent* SpringArmComponent;
-
-    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
-    class UCameraComponent* CameraComponent;
-
-    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
     class USTUHealthComponent* HealthComponent;
-
-    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
-    class UTextRenderComponent* HealthTextComponent;
 
     UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
     class USTUWeaponComponent* WeaponComponent;
 
     UPROPERTY(EditDefaultsOnly, Category = "Animation")
     class UAnimMontage* DeathAnimMontage;
-
-    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
-    class UInputMappingContext* DefaultMappingContext;
-
-    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
-    class UInputAction* JumpAction;
-
-    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
-    class UInputAction* RunAction;
-
-    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
-    class UInputAction* MoveAction;
-
-    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
-    class UInputAction* LookAction;
-
-    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
-    class UInputAction* ShootAction;
-
-    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
-    class UInputAction* NextWeaponAction;
-
-    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
-    class UInputAction* ReloadAction;
 
     UPROPERTY(EditDefaultsOnly, Category = "Damage")
     FVector2D LandedDamageVelocity = FVector2D(900.0f, 1200.0f);
@@ -94,25 +58,17 @@ protected:
     UPROPERTY(BlueprintReadWrite, Category = "Movement")
     bool WantsToTurnLeft = false;
 
+    UPROPERTY(BlueprintReadWrite, Category = "Movement")
+    bool WantsToRun = false;
+
+    UPROPERTY(BlueprintReadWrite, Category = "Movement")
+    bool IsMovingForward = false;
+
     virtual void BeginPlay() override;
 
     virtual void OnDeath();
 
-    void Move(const FInputActionValue& Value);
-
-    void Look(const FInputActionValue& Value);
-
-    void Run();
-    void StopRunning();
-
-    void StartFire();
-    void StopFire();
-
 private:
-    bool WantsToRun = false;
-
-    bool IsMovingForward = false;
-
     UFUNCTION()
     void OnGroundLanded(const FHitResult& Hit);
 
