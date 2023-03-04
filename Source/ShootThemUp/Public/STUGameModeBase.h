@@ -20,6 +20,8 @@ public:
 
     void Killed(class AController* KillerController, class AController* VictimController);
 
+    FRoundInfo GetRoundInfo() const;
+
 protected:
     UPROPERTY(EditDefaultsOnly, Category = "Game")
     TSubclassOf<class AAIController> AIControllerClass;

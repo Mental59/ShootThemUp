@@ -54,6 +54,17 @@ void ASTUGameModeBase::Killed(AController* KillerController, AController* Victim
     }
 }
 
+FRoundInfo ASTUGameModeBase::GetRoundInfo() const
+{
+    FRoundInfo RoundInfo;
+
+    RoundInfo.RoundsNum = GameData.RoundsNum;
+    RoundInfo.CurrentRoundNum = CurrentRound;
+    RoundInfo.SecondsLeft = RoundCountDown;
+
+    return RoundInfo;
+}
+
 void ASTUGameModeBase::SpawnBots()
 {
     if (!GetWorld()) return;

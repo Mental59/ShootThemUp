@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerState.h"
+#include "STUCoreTypes.h"
 #include "STUPlayerState.generated.h"
 
 UCLASS()
@@ -21,15 +22,12 @@ public:
     void AddKill();
     void AddDeath();
 
-    int32 GetKillsNum();
-    int32 GetDeathsNum();
+    const FPlayerStats& GetPlayerStats() const;
 
     void LogInfo() const;
 
 private:
     int32 TeamID;
     FLinearColor TeamColor;
-
-    int32 KillsNum = 0;
-    int32 DeathsNum = 0;
+    FPlayerStats PlayerStats;
 };

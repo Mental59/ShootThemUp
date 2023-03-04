@@ -3,6 +3,8 @@
 #include "UI/STUPlayerHUDWidget.h"
 #include "Components/STUHealthComponent.h"
 #include "Components/STUWeaponComponent.h"
+#include "Player/STUPlayerState.h"
+#include "STUGameModeBase.h"
 
 float USTUPlayerHUDWidget::GetHealthPercent() const
 {

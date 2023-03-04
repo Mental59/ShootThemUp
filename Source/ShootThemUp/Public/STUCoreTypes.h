@@ -98,3 +98,30 @@ struct FGameData
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Team")
     TArray<FLinearColor> TeamColors;
 };
+
+USTRUCT(BlueprintType)
+struct FRoundInfo
+{
+    GENERATED_USTRUCT_BODY()
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Round")
+    int32 SecondsLeft;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Round")
+    int32 CurrentRoundNum;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Round")
+    int32 RoundsNum;
+};
+
+USTRUCT(BlueprintType)
+struct FPlayerStats
+{
+    GENERATED_USTRUCT_BODY()
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Stats")
+    int32 Kills;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Stats")
+    int32 Deaths;
+};

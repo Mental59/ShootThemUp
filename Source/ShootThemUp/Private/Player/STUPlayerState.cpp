@@ -26,25 +26,20 @@ const FLinearColor& ASTUPlayerState::GetTeamColor() const
 
 void ASTUPlayerState::AddKill()
 {
-    KillsNum++;
+    PlayerStats.Kills++;
 }
 
 void ASTUPlayerState::AddDeath()
 {
-    DeathsNum++;
+    PlayerStats.Deaths++;
 }
 
-int32 ASTUPlayerState::GetKillsNum()
+const FPlayerStats& ASTUPlayerState::GetPlayerStats() const
 {
-    return KillsNum;
-}
-
-int32 ASTUPlayerState::GetDeathsNum()
-{
-    return DeathsNum;
+    return PlayerStats;
 }
 
 void ASTUPlayerState::LogInfo() const
 {
-    UE_LOG(LogSTUPlayerState, Display, TEXT("TeamID: %i, Kills: %i, Deaths: %i"), TeamID, KillsNum, DeathsNum);
+    UE_LOG(LogSTUPlayerState, Display, TEXT("TeamID: %i, Kills: %i, Deaths: %i"), TeamID, PlayerStats.Kills, PlayerStats.Deaths);
 }
