@@ -6,17 +6,6 @@
 #include "Player/STUPlayerState.h"
 #include "STUGameModeBase.h"
 
-bool USTUPlayerHUDWidget::Initialize()
-{
-    if (APlayerController* PlayerController = GetOwningPlayer())
-    {
-        PlayerController->GetOnNewPawnNotifier().AddUObject(this, &USTUPlayerHUDWidget::OnNewPawn);
-        OnNewPawn(GetOwningPlayerPawn());
-    }
-
-    return Super::Initialize();
-}
-
 void USTUPlayerHUDWidget::OnNewPawn(APawn* NewPawn)
 {
     if (NewPawn)
@@ -26,6 +15,16 @@ void USTUPlayerHUDWidget::OnNewPawn(APawn* NewPawn)
         {
             HealthComponent->OnHealthChanged.AddUObject(this, &USTUPlayerHUDWidget::OnHealthChanged);
         }
+    }
+}
+
+void USTUPlayerHUDWidget::NativeOnInitialized()
+{
+    Super::NativeOnInitialized();
+    if (APlayerController* PlayerController = GetOwningPlayer())
+    {
+        PlayerController->GetOnNewPawnNotifier().AddUObject(this, &USTUPlayerHUDWidget::OnNewPawn);
+        OnNewPawn(GetOwningPlayerPawn());
     }
 }
 

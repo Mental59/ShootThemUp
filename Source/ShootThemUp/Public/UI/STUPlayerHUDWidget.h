@@ -31,10 +31,10 @@ public:
     UFUNCTION(BlueprintImplementableEvent, Category = "UI")
     void OnTakeDamage();
 
-    virtual bool Initialize() override;
-
 protected:
     void OnNewPawn(class APawn* NewPawn);
+
+    virtual void NativeOnInitialized() override;
 
 private:
     template <typename T>
