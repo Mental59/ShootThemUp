@@ -36,12 +36,14 @@ void ASTUPlayerController::SetupInputComponent()
 
     if (UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(InputComponent.Get()))
     {
+        if (PauseAction) PauseAction->bTriggerWhenPaused = true;
         EnhancedInputComponent->BindAction(PauseAction, ETriggerEvent::Triggered, this, &ASTUPlayerController::OnGamePause);
     }
 }
 
 void ASTUPlayerController::OnGamePause()
 {
+    UE_LOG(LogTemp, Warning, TEXT("OnGamePause"));
     if (GetWorld() && GetWorld()->GetAuthGameMode())
     {
         GetWorld()->GetAuthGameMode()->SetPause(this);
