@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
+#include "STUCoreTypes.h"
 #include "STUPlayerController.generated.h"
 
 UCLASS()
@@ -17,4 +18,19 @@ public:
 protected:
     UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
     class USTURespawnComponent* RespawnComponent;
+
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+    class UInputMappingContext* MappingContext;
+
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+    class UInputAction* PauseAction;
+
+    virtual void BeginPlay() override;
+    virtual void SetupInputComponent() override;
+
+private:
+    ESTUMatchState CurrentMatchState = ESTUMatchState::WaitingToStart;
+
+    void OnGamePause();
+    void OnMatchStateChanged(ESTUMatchState MatchState);
 };

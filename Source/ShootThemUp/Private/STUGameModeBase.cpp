@@ -29,6 +29,8 @@ void ASTUGameModeBase::StartPlay()
 
     CurrentRound = 1;
     StartRound();
+
+    SetMatchState(ESTUMatchState::InProgress);
 }
 
 UClass* ASTUGameModeBase::GetDefaultPawnClassForController_Implementation(AController* InController)
@@ -72,6 +74,26 @@ FRoundInfo ASTUGameModeBase::GetRoundInfo() const
 void ASTUGameModeBase::RequestPlayerRespawn(AController* PlayerController)
 {
     ResetOnePlayer(PlayerController);
+}
+
+bool ASTUGameModeBase::SetPause(APlayerController* PC, FCanUnpause CanUnpauseDelegate)
+{
+    bool IsPauseSet = Super::SetPause(PC, CanUnpauseDelegate);
+    if (IsPauseSet)
+    {
+        SetMatchState(ESTUMatchState::Pause);
+    }
+    return IsPauseSet;
+}
+
+bool ASTUGameModeBase::ClearPause()
+{
+    bool IsPauseCleared = Super::ClearPause();
+    if (IsPauseCleared)
+    {
+        SetMatchState(ESTUMatchState::InProgress);
+    }
+    return IsPauseCleared;
 }
 
 void ASTUGameModeBase::SpawnBots()
@@ -216,4 +238,14 @@ void ASTUGameModeBase::OnGameOver()
             Pawn->DisableInput(nullptr);
         }
     }
+
+    SetMatchState(ESTUMatchState::GameOver);
+}
+
+void ASTUGameModeBase::SetMatchState(ESTUMatchState State)
+{
+    if (MatchState == State) return;
+
+    MatchState = State;
+    OnMatchStateChanged.Broadcast(MatchState);
 }

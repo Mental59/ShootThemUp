@@ -3,6 +3,9 @@
 #include "UI/STUGameHUD.h"
 #include <Engine/Canvas.h>
 #include <Blueprint/UserWidget.h>
+#include "STUGameModeBase.h"
+
+DEFINE_LOG_CATEGORY_STATIC(LogSTUGameHUD, All, All);
 
 void ASTUGameHUD::DrawHUD()
 {
@@ -15,9 +18,24 @@ void ASTUGameHUD::BeginPlay()
 {
     Super::BeginPlay();
 
-    if (UUserWidget* PlayerHUDWidget = CreateWidget<UUserWidget>(GetWorld(), PlayerHUDWidgetClass))
+    GameWidgets.Add(ESTUMatchState::InProgress, CreateWidget<UUserWidget>(GetWorld(), PlayerHUDWidgetClass));
+    GameWidgets.Add(ESTUMatchState::Pause, CreateWidget<UUserWidget>(GetWorld(), PauseWidgetClass));
+
+    for (const auto& GameWidgetPair : GameWidgets)
     {
-        PlayerHUDWidget->AddToViewport();
+        if (GameWidgetPair.Value)
+        {
+            GameWidgetPair.Value->AddToViewport();
+            GameWidgetPair.Value->SetVisibility(ESlateVisibility::Hidden);
+        }
+    }
+
+    if (UWorld* World = GetWorld())
+    {
+        if (ASTUGameModeBase* GameMode = Cast<ASTUGameModeBase>(World->GetAuthGameMode()))
+        {
+            GameMode->OnMatchStateChanged.AddUObject(this, &ASTUGameHUD::OnMatchStateChanged);
+        }
     }
 }
 
@@ -32,4 +50,20 @@ void ASTUGameHUD::DrawCrosshair()
 
     DrawLine(CenterX - HalfLineSize, CenterY, CenterX + HalfLineSize, CenterY, LineColor, LineThickness);
     DrawLine(CenterX, CenterY - HalfLineSize, CenterX, CenterY + HalfLineSize, LineColor, LineThickness);
+}
+
+void ASTUGameHUD::OnMatchStateChanged(ESTUMatchState MatchState)
+{
+    if (CurrentWidget)
+    {
+        CurrentWidget->SetVisibility(ESlateVisibility::Hidden);
+    }
+
+    if (GameWidgets.Contains(MatchState))
+    {
+        CurrentWidget = GameWidgets[MatchState];
+        CurrentWidget->SetVisibility(ESlateVisibility::Visible);
+    }
+
+    UE_LOG(LogSTUGameHUD, Display, TEXT("Match state has been changed: %s"), *UEnum::GetValueAsString(MatchState));
 }
