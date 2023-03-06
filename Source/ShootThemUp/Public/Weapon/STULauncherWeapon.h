@@ -18,5 +18,14 @@ protected:
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
     TSubclassOf<class ASTUProjectile> ProjectileClass;
 
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon", meta = (ClampMin = "0"))
+    float FireRate = 1.0f;
+
     virtual void MakeShot() override;
+
+private:
+    FTimerHandle ShootTimer;
+    bool CanShoot = true;
+
+    void ActivateShooting();
 };

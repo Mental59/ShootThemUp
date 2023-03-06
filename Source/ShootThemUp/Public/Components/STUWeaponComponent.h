@@ -26,6 +26,8 @@ public:
     bool TryToAddAmmo(TSubclassOf<class ASTUBaseWeapon> WeaponType, int32 MagazinesAmount);
     bool NeedAmmo(TSubclassOf<class ASTUBaseWeapon> WeaponType, bool NeedFullAmmo) const;
     bool IsOutOfAmmo() const;
+    bool CanFire() const;
+    bool CanEquip() const;
 
 protected:
     UPROPERTY(EditDefaultsOnly, Category = "Weapon")
@@ -53,9 +55,6 @@ protected:
 
     virtual void BeginPlay() override;
     virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
-
-    bool CanFire() const;
-    bool CanEquip() const;
 
     void EquipWeapon(int32 WeaponIndex);
 

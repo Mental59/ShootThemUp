@@ -50,6 +50,7 @@ void ASTUProjectile::OnProjectileHit(
     if (!GetWorld()) return;
 
     MovementComponent->StopMovementImmediately();
+    CollisionComponent->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
 
     UGameplayStatics::ApplyRadialDamage(GetWorld(), DamageAmount, GetActorLocation(), DamageRaduis, UDamageType::StaticClass(), {}, this,
         GetOwnerController(), DoFullDamage);

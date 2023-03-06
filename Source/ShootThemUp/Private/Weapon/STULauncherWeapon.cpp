@@ -6,7 +6,7 @@
 
 void ASTULauncherWeapon::StartFire()
 {
-    MakeShot();
+    if (CanShoot) MakeShot();
 }
 
 void ASTULauncherWeapon::MakeShot()
@@ -33,4 +33,12 @@ void ASTULauncherWeapon::MakeShot()
 
     DecreaseAmmo();
     SpawnMuzzleFX();
+
+    CanShoot = false;
+    GetWorld()->GetTimerManager().SetTimer(ShootTimer, this, &ASTULauncherWeapon::ActivateShooting, FireRate, false);
+}
+
+void ASTULauncherWeapon::ActivateShooting()
+{
+    CanShoot = true;
 }
