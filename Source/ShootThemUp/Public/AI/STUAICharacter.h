@@ -18,5 +18,19 @@ public:
     class UBehaviorTree* BehaviorTree;
 
 protected:
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
+    class UWidgetComponent* HealthWidgetComponent;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "HealthBar", meta = (ClampMin = "0"))
+    float HealthBarMaxDrawDistance = 1750.0f;
+
+    UFUNCTION()
+    void OnTakeDamage(
+        AActor* DamagedActor, float Damage, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser);
+
+    virtual void BeginPlay() override;
+
+    virtual void OnHealthChanged(float Health, float HealthDelta) override;
+    
     virtual void OnDeath() override;
 };

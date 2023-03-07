@@ -66,13 +66,13 @@ protected:
 
     virtual void BeginPlay() override;
 
+    virtual void OnHealthChanged(float Health, float HealthDelta);
+
     virtual void OnDeath();
 
 private:
     UFUNCTION()
     void OnGroundLanded(const FHitResult& Hit);
-
-    void OnHealthChanged(float Health, float HealthDelta);
 
     void TurnCharacter();
 };
