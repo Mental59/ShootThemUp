@@ -12,13 +12,12 @@ enum class ESTUMatchState : uint8
     Pause,
     GameOver
 };
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnMatchStateChangedSignature, ESTUMatchState);
 
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnMagazineEmptySignature, class ASTUBaseWeapon*);
 
 DECLARE_MULTICAST_DELEGATE(FOnDeathSignature);
 DECLARE_MULTICAST_DELEGATE_TwoParams(FOnHealthChangedSignature, float, float);
-
-DECLARE_MULTICAST_DELEGATE_OneParam(FOnMatchStateChangedSignature, ESTUMatchState);
 
 USTRUCT(BlueprintType)
 struct FAmmoData
@@ -139,3 +138,22 @@ struct FPlayerStats
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Stats")
     int32 Deaths;
 };
+
+USTRUCT(BlueprintType)
+struct FLevelData
+{
+    GENERATED_USTRUCT_BODY()
+
+    UPROPERTY(BlueprintReadOnly, Category = "Game")
+    int32 LevelId;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Game")
+    FName LevelName = NAME_None;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Game")
+    FName LevelDisplayName = NAME_None;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Game")
+    class UTexture2D* LevelThumb;
+};
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnLevelSelectedSignature, const FLevelData&);

@@ -5,6 +5,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "InputMappingContext.h"
 #include "GameFramework/PlayerController.h"
 #include "Components/STUWeaponComponent.h"
 #include "InputActionValue.h"
@@ -37,7 +38,7 @@ void ASTUPlayerCharacter::BeginPlay()
 
     check(CameraCollisionComponent);
 
-    if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
+    if (const APlayerController* PlayerController = Cast<APlayerController>(Controller))
     {
         if (UEnhancedInputLocalPlayerSubsystem* Subsystem =
                 ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
@@ -72,8 +73,7 @@ void ASTUPlayerCharacter::CheckCameraOverlap()
 
     for (USceneComponent* MeshChild : MeshChildren)
     {
-        UPrimitiveComponent* MeshChildGeometry = Cast<UPrimitiveComponent>(MeshChild);
-        if (MeshChildGeometry)
+        if (UPrimitiveComponent* MeshChildGeometry = Cast<UPrimitiveComponent>(MeshChild))
         {
             MeshChildGeometry->SetOwnerNoSee(HideMesh);
         }
@@ -120,7 +120,7 @@ void ASTUPlayerCharacter::Move(const FInputActionValue& Value)
 {
     if (!CanMove || !Controller) return;
 
-    FVector2D MovementVector = Value.Get<FVector2D>();
+    const FVector2D MovementVector = Value.Get<FVector2D>();
 
     IsMovingForward = MovementVector.Y > 0.0 && FMath::IsNearlyZero(MovementVector.X);
 
@@ -139,7 +139,7 @@ void ASTUPlayerCharacter::Look(const FInputActionValue& Value)
 {
     if (!Controller) return;
 
-    FVector2D LookAxisVector = Value.Get<FVector2D>();
+    const FVector2D LookAxisVector = Value.Get<FVector2D>();
 
     AddControllerYawInput(LookAxisVector.X);
     AddControllerPitchInput(LookAxisVector.Y);
