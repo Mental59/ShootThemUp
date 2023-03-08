@@ -2,6 +2,15 @@
 
 #include "STUGameInstance.h"
 
+void USTUGameInstance::Init()
+{
+    Super::Init();
+    for (int32 i = 0; i < LevelsData.Num(); i++)
+    {
+        LevelsData[i].LevelId = i;
+    }
+}
+
 const FLevelData& USTUGameInstance::GetStartUpLevel() const
 {
     return StartUpLevel;
@@ -20,13 +29,4 @@ const TArray<FLevelData>& USTUGameInstance::GetLevelsData() const
 const FName& USTUGameInstance::GetMenuLevelName() const
 {
     return MenuLevelName;
-}
-
-void USTUGameInstance::OnStart()
-{
-    Super::OnStart();
-    for (int32 i = 0; i < LevelsData.Num(); i++)
-    {
-        LevelsData[i].LevelId = i;
-    }
 }

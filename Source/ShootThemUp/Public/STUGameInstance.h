@@ -13,6 +13,8 @@ class SHOOTTHEMUP_API USTUGameInstance : public UGameInstance
     GENERATED_BODY()
 
 public:
+    virtual void Init() override;
+    
     const FLevelData& GetStartUpLevel() const;
     void SetStartUpLevel(const FLevelData& LevelData);
 
@@ -26,8 +28,6 @@ protected:
     
     UPROPERTY(EditDefaultsOnly, Category = "Game")
     FName MenuLevelName = NAME_None;
-
-    virtual void OnStart() override;
 
 private:
     FLevelData StartUpLevel; 

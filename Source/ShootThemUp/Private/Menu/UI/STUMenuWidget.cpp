@@ -26,8 +26,6 @@ void USTUMenuWidget::NativeOnInitialized()
 
 void USTUMenuWidget::OnAnimationFinished_Implementation(const UWidgetAnimation* Animation)
 {
-    Super::OnAnimationFinished_Implementation(Animation);
-
     if (!GetWorld() || Animation != HideAnimation) return;
 
     if (const USTUGameInstance* GameInstance = GetWorld()->GetGameInstance<USTUGameInstance>())
