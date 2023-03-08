@@ -13,7 +13,7 @@ class SHOOTTHEMUP_API ASTUMenuHUD : public AHUD
 
 protected:
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "UI")
-    TSubclassOf<class UUserWidget> MenuWidgetClass;
+    TSubclassOf<class USTUBaseWidget> MenuWidgetClass;
 
     virtual void BeginPlay() override;
 };
