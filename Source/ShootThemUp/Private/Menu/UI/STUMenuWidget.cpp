@@ -26,11 +26,12 @@ void USTUMenuWidget::NativeOnInitialized()
 
 void USTUMenuWidget::OnAnimationFinished_Implementation(const UWidgetAnimation* Animation)
 {
-    if (!GetWorld() || Animation != HideAnimation) return;
-
-    if (const USTUGameInstance* GameInstance = GetWorld()->GetGameInstance<USTUGameInstance>())
+    if (GetWorld() && Animation == HideAnimation)
     {
-        UGameplayStatics::OpenLevel(this, GameInstance->GetStartUpLevel().LevelName);
+        if (const USTUGameInstance* GameInstance = GetWorld()->GetGameInstance<USTUGameInstance>())
+        {
+            UGameplayStatics::OpenLevel(this, GameInstance->GetStartUpLevel().LevelName);
+        }
     }
 }
 
