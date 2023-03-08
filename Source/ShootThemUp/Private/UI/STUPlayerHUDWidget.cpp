@@ -5,6 +5,9 @@
 #include "Components/STUWeaponComponent.h"
 #include "Player/STUPlayerState.h"
 #include "STUGameModeBase.h"
+#include "Components/ProgressBar.h"
+#include "Player/STUPlayerState.h"
+#include "Animation/WidgetAnimation.h"
 
 void USTUPlayerHUDWidget::OnNewPawn(APawn* NewPawn)
 {
@@ -15,6 +18,7 @@ void USTUPlayerHUDWidget::OnNewPawn(APawn* NewPawn)
         {
             HealthComponent->OnHealthChanged.AddUObject(this, &USTUPlayerHUDWidget::OnHealthChanged);
         }
+        UpdateHealthBar();
     }
 }
 
@@ -66,7 +70,24 @@ bool USTUPlayerHUDWidget::IsPlayerSpectating() const
 
 void USTUPlayerHUDWidget::OnHealthChanged(float Health, float HealthDelta)
 {
-    if (HealthDelta < 0.0f) OnTakeDamage();
+    if (HealthDelta < 0.0f)
+    {
+        OnTakeDamage();
+
+        if (DamageAnimation && !IsAnimationPlaying(DamageAnimation))
+        {
+            PlayAnimation(DamageAnimation);
+        }
+    }
+    UpdateHealthBar();
+}
+
+void USTUPlayerHUDWidget::UpdateHealthBar()
+{
+    if (HealthBar)
+    {
+        HealthBar->SetFillColorAndOpacity(GetHealthPercent() > PercentColorChangeThreshold ? DefaultColor : LowHealthColor);
+    }
 }
 
 template <typename T>

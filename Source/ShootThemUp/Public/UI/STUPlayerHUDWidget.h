@@ -3,12 +3,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Blueprint/UserWidget.h"
+#include "UI/STUBaseWidget.h"
 #include "STUCoreTypes.h"
 #include "STUPlayerHUDWidget.generated.h"
 
 UCLASS()
-class SHOOTTHEMUP_API USTUPlayerHUDWidget : public UUserWidget
+class SHOOTTHEMUP_API USTUPlayerHUDWidget : public USTUBaseWidget
 {
     GENERATED_BODY()
 
@@ -32,6 +32,21 @@ public:
     void OnTakeDamage();
 
 protected:
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "UI")
+    float PercentColorChangeThreshold = 0.4f;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "UI")
+    FLinearColor DefaultColor = FLinearColor::White;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "UI")
+    FLinearColor LowHealthColor = FLinearColor::Red;
+    
+    UPROPERTY(meta = (BindWidget))
+    class UProgressBar* HealthBar;
+
+    UPROPERTY(meta = (BindWidgetAnim), Transient)
+    class UWidgetAnimation* DamageAnimation;
+    
     void OnNewPawn(class APawn* NewPawn);
 
     virtual void NativeOnInitialized() override;
@@ -41,4 +56,5 @@ private:
     T* GetComponent() const;
 
     void OnHealthChanged(float Health, float HealthDelta);
+    void UpdateHealthBar();
 };

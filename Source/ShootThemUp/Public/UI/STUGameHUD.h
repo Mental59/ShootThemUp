@@ -29,10 +29,10 @@ protected:
 
 private:
     UPROPERTY()
-    TMap<ESTUMatchState, class UUserWidget*> GameWidgets;
+    TMap<ESTUMatchState, class USTUBaseWidget*> GameWidgets;
 
     UPROPERTY()
-    class UUserWidget* CurrentWidget = nullptr;
+    class USTUBaseWidget* CurrentWidget = nullptr;
 
     void DrawCrosshair();
     void OnMatchStateChanged(ESTUMatchState MatchState);

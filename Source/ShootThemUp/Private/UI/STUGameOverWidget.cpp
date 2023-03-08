@@ -60,6 +60,7 @@ void USTUGameOverWidget::UpdatePlayersStats()
         PlayerStatRowWidget->SetDeaths(STUUtils::TextFromInt(PlayerStats.Deaths));
         PlayerStatRowWidget->SetTeam(STUUtils::TextFromInt(PlayerState->GetTeamID()));
         PlayerStatRowWidget->SetPlayerIndicatorVisibility(Controller->IsPlayerController());
+        PlayerStatRowWidget->SetTeamColor(PlayerState->GetTeamColor());
 
         PlayerStatsBox->AddChild(PlayerStatRowWidget);
     }
@@ -70,3 +71,4 @@ void USTUGameOverWidget::OnRestartLevel()
     const FString CurrentLevelName = UGameplayStatics::GetCurrentLevelName(this);
     UGameplayStatics::OpenLevel(this, FName(CurrentLevelName));
 }
+ 
