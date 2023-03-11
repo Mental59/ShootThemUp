@@ -17,4 +17,7 @@ public:
 protected:
     UPROPERTY(meta = (BindWidgetAnim), Transient)
     class UWidgetAnimation* ShowAnimation;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Sound")
+    class USoundCue* ShowWidgetSound;
 };

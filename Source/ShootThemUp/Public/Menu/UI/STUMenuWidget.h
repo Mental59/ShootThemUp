@@ -24,6 +24,9 @@ protected:
     UPROPERTY(meta = (BindWidget))
     class UImage* ShowImage;
 
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Sound")
+    class USoundCue* StartGameSound;
+
     virtual void NativeOnInitialized() override;
     virtual void OnAnimationFinished_Implementation(const class UWidgetAnimation* Animation) override;
 
