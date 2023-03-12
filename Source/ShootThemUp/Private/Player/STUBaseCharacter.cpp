@@ -55,44 +55,53 @@ void ASTUBaseCharacter::BeginPlay()
 void ASTUBaseCharacter::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
-    TurnCharacter();
+    TurnInPlace();
 }
 
-void ASTUBaseCharacter::TurnCharacter()
+void ASTUBaseCharacter::TurnInPlace()
 {
-    if (!GetVelocity().IsZero())
+    if(GetVelocity().IsNearlyZero())
     {
-        WantsToTurnRight = WantsToTurnLeft = false;
-        GetCharacterMovement()->bUseControllerDesiredRotation = true;
-        return;
-    }
+        const float YawOffset = GetAimOffsets().Yaw;
 
-    const FRotator AimOffsets = GetAimOffsets();
+        if (FMath::IsNearlyZero(YawOffset, 1.0E-2) || (FMath::Abs(YawOffset) <= TurnInPlaceAngle && !IsTurning))
+        {
+            WantsToTurnRight = WantsToTurnLeft = false;
+            IsTurning = false;
+            GetCharacterMovement()->bUseControllerDesiredRotation = false;
+        }
+        else
+        {
+            if (YawOffset > TurnInPlaceAngle && !WantsToTurnRight)
+            {
+                WantsToTurnRight = true;
+                WantsToTurnLeft = false;
+                IsTurning = true;
+                GetCharacterMovement()->bUseControllerDesiredRotation = true;
+            }
+            else
+            {
+                WantsToTurnRight = false;
+            }
 
-    if (AimOffsets.Yaw > 90.0 && !WantsToTurnRight)
-    {
-        WantsToTurnRight = true;
-        GetCharacterMovement()->bUseControllerDesiredRotation = true;
+            if (YawOffset < -TurnInPlaceAngle && !WantsToTurnLeft)
+            {
+                WantsToTurnRight = false;
+                WantsToTurnLeft = true;
+                IsTurning = true;
+                GetCharacterMovement()->bUseControllerDesiredRotation = true;
+            }
+            else
+            {
+                WantsToTurnLeft = false;
+            }
+        }
     }
     else
     {
-        WantsToTurnRight = false;
-    }
-
-    if (AimOffsets.Yaw < -90.0 && !WantsToTurnLeft)
-    {
-        WantsToTurnLeft = true;
-        GetCharacterMovement()->bUseControllerDesiredRotation = true;
-    }
-    else
-    {
-        WantsToTurnLeft = false;
-    }
-
-    if (FMath::IsNearlyZero(AimOffsets.Yaw, 1.0E-4))
-    {
         WantsToTurnRight = WantsToTurnLeft = false;
-        GetCharacterMovement()->bUseControllerDesiredRotation = false;
+        IsTurning = false;
+        GetCharacterMovement()->bUseControllerDesiredRotation = true;
     }
 }
 

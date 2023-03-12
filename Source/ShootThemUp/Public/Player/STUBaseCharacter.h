@@ -49,6 +49,9 @@ protected:
     UPROPERTY(EditDefaultsOnly, Category = "Material")
     FName MaterialColorName = "Paint Color";
 
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Movement", meta = (ClampMin = "0", ClampMax = "180"))
+    float TurnInPlaceAngle = 90.0f;
+    
     UPROPERTY(BlueprintReadWrite, Category = "Movement")
     bool CanMove = true;
 
@@ -71,8 +74,10 @@ protected:
     virtual void OnDeath();
 
 private:
+    bool IsTurning = false;
+    
     UFUNCTION()
     void OnGroundLanded(const FHitResult& Hit);
 
-    void TurnCharacter();
+    void TurnInPlace();
 };
