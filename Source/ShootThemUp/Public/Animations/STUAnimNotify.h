@@ -15,7 +15,8 @@ class SHOOTTHEMUP_API USTUAnimNotify : public UAnimNotify
 
 public:
     virtual void Notify(
-        class USkeletalMeshComponent* MeshComp, class UAnimSequenceBase* Animation, const FAnimNotifyEventReference& EventReference);
+        class USkeletalMeshComponent* MeshComp, class UAnimSequenceBase* Animation, const FAnimNotifyEventReference& EventReference
+        ) override;
 
     FOnNotifiedSignature OnNotified;
 };

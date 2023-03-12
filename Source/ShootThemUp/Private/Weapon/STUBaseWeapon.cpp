@@ -5,9 +5,11 @@
 #include <Engine/World.h>
 #include <DrawDebugHelpers.h>
 #include <GameFramework/Character.h>
-#include <GameFramework/Controller.h>
 #include "NiagaraFunctionLibrary.h"
 #include "NiagaraComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "Sound/SoundCue.h"
+#include "Components/AudioComponent.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogBaseWeapon, All, All);
 
@@ -28,6 +30,8 @@ void ASTUBaseWeapon::BeginPlay()
     CurrentAmmo.IsInfinite = DefaultAmmo.IsInfinite;
     CurrentAmmo.NumBullets = FMath::Clamp(StartAmmo.NumBullets, 0, DefaultAmmo.NumBullets);
     CurrentAmmo.NumMagazines = FMath::Clamp(StartAmmo.NumMagazines, 0, DefaultAmmo.NumMagazines);
+
+    PlayerOwner = Cast<ACharacter>(GetOwner());
 }
 
 void ASTUBaseWeapon::StartFire() {}
@@ -109,9 +113,21 @@ void ASTUBaseWeapon::DrawDebugGeometry(const FHitResult& HitResult) const
     if (HitResult.bBlockingHit) DrawDebugSphere(GetWorld(), HitResult.ImpactPoint, 10.0f, 24, FColor::Red, false, 5.0f);
 }
 
+void ASTUBaseWeapon::SetAnimNotifications(UAnimMontage* ReloadAnimMontage)
+{
+}
+
+void ASTUBaseWeapon::StopReloadSounds()
+{
+    if (ReloadStartAudioComponent)
+    {
+        ReloadStartAudioComponent->Stop();
+    }
+}
+
 ACharacter* ASTUBaseWeapon::GetPlayer() const
 {
-    return Cast<ACharacter>(GetOwner());
+    return PlayerOwner;
 }
 
 FVector ASTUBaseWeapon::GetMuzzleWorldLocation() const
@@ -224,4 +240,13 @@ UNiagaraComponent* ASTUBaseWeapon::SpawnMuzzleFX()
         FRotator::ZeroRotator,                                     //
         EAttachLocation::SnapToTarget,                             //
         true);
+}
+
+void ASTUBaseWeapon::OnReloadStart(USkeletalMeshComponent* MeshComp)
+{
+    if (const ACharacter* Character = GetPlayer())
+    {
+        if (Character->GetMesh() != MeshComp) return;
+        ReloadStartAudioComponent = UGameplayStatics::SpawnSoundAttached(ReloadStartSound, WeaponMesh);
+    }
 }

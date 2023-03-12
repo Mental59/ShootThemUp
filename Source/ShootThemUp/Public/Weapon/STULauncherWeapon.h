@@ -13,6 +13,8 @@ class SHOOTTHEMUP_API ASTULauncherWeapon : public ASTUBaseWeapon
 
 public:
     virtual void StartFire() override;
+    virtual void SetAnimNotifications(class UAnimMontage* ReloadAnimMontage) override;
+    virtual void StopReloadSounds() override;
 
 protected:
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
@@ -21,7 +23,15 @@ protected:
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon", meta = (ClampMin = "0"))
     float FireRate = 1.0f;
 
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Sound")
+    class USoundCue* ReloadEndSound;
+
+    UPROPERTY(BlueprintReadWrite, Category = "Sound")
+    class UAudioComponent* ReloadEndAudioComponent = nullptr;
+
     virtual void MakeShot() override;
+
+    void OnReloadEnd(USkeletalMeshComponent* MeshComp);
 
 private:
     FTimerHandle ShootTimer;

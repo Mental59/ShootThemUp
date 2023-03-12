@@ -56,11 +56,14 @@ void USTUWeaponComponent::SpawnWeapons()
 
     for (FWeaponData& OneWeaponData : WeaponData)
     {
-        ASTUBaseWeapon* Weapon = GetWorld()->SpawnActor<ASTUBaseWeapon>(OneWeaponData.WeaponClass);
+        FActorSpawnParameters SpawnParameters;
+        SpawnParameters.Owner = Character;
+        
+        ASTUBaseWeapon* Weapon = GetWorld()->SpawnActor<ASTUBaseWeapon>(OneWeaponData.WeaponClass, SpawnParameters);
         if (!Weapon) continue;
 
         Weapon->OnMagazineEmpty.AddUObject(this, &USTUWeaponComponent::OnMagazineEmpty);
-        Weapon->SetOwner(Character);
+        Weapon->SetAnimNotifications(OneWeaponData.ReloadAnimMontage);
         Weapons.Add(Weapon);
 
         AttachWeaponToSocket(Weapon, Character->GetMesh(), WeaponArmorySocketName);
@@ -137,7 +140,7 @@ void USTUWeaponComponent::InitAnimations()
     }
 }
 
-void USTUWeaponComponent::OnEquipFinished(class USkeletalMeshComponent* MeshComp)
+void USTUWeaponComponent::OnEquipFinished(USkeletalMeshComponent* MeshComp)
 {
     ACharacter* Character = GetCharacter();
     if (!Character || Character->GetMesh() != MeshComp) return;
@@ -183,6 +186,7 @@ void USTUWeaponComponent::StopFire()
 void USTUWeaponComponent::NextWeapon()
 {
     if (!CanEquip()) return;
+    if (CurrentWeapon) CurrentWeapon->StopReloadSounds();
     CurrentWeaponIndex = (CurrentWeaponIndex + 1) % Weapons.Num();
     EquipWeapon(CurrentWeaponIndex);
 }
@@ -266,7 +270,7 @@ void USTUWeaponComponent::ChangeMagazine()
 
 bool USTUWeaponComponent::CanFire() const
 {
-    return CurrentWeapon && !EqiupAnimInProgress && !ReloadAnimInProgress && !CurrentWeapon->IsMagazineEmpty();
+    return CurrentWeapon && !EqiupAnimInProgress && !ReloadAnimInProgress;
 }
 
 bool USTUWeaponComponent::CanEquip() const

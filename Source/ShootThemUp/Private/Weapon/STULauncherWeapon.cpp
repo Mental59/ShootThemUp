@@ -3,15 +3,59 @@
 #include "Weapon/STULauncherWeapon.h"
 #include "Weapon/STUProjectile.h"
 #include <Kismet/GameplayStatics.h>
+#include "Sound/SoundCue.h"
+#include "Animations/AnimUtils.h"
+#include "Animations/STULauncherReloadStartAnimNotify.h"
+#include "Animations/STULauncherReloadEndAnimNotify.h"
+#include "Components/AudioComponent.h"
+#include "GameFramework/Character.h"
 
 void ASTULauncherWeapon::StartFire()
 {
     if (CanShoot) MakeShot();
 }
 
+void ASTULauncherWeapon::SetAnimNotifications(UAnimMontage* ReloadAnimMontage)
+{
+    Super::SetAnimNotifications(ReloadAnimMontage);
+    
+    if (auto ReloadStartNotify = AnimUtils::FindFirstNotifyByClass<USTULauncherReloadStartAnimNotify>(ReloadAnimMontage))
+    {
+        ReloadStartNotify->OnNotified.AddUObject(this, &ASTULauncherWeapon::OnReloadStart);
+    }
+    else
+    {
+        checkNoEntry();
+    }
+
+    if (auto ReloadEndNotify = AnimUtils::FindFirstNotifyByClass<USTULauncherReloadEndAnimNotify>(ReloadAnimMontage))
+    {
+        ReloadEndNotify->OnNotified.AddUObject(this, &ASTULauncherWeapon::OnReloadEnd);
+    }
+    else
+    {
+        checkNoEntry();
+    }
+}
+
+void ASTULauncherWeapon::StopReloadSounds()
+{
+    Super::StopReloadSounds();
+    if (ReloadEndAudioComponent)
+    {
+        ReloadEndAudioComponent->Stop();
+    }
+}
+
 void ASTULauncherWeapon::MakeShot()
 {
-    if (!GetWorld() || IsOutOfAmmo()) return;
+    if (!GetWorld()) return;
+
+    if (IsOutOfAmmo())
+    {
+        UGameplayStatics::SpawnSoundAtLocation(GetWorld(), NoAmmoSound, GetActorLocation());
+        return;
+    }
 
     FVector CameraTraceStart, CameraTraceEnd;
     if (!GetCameraTraceData(CameraTraceStart, CameraTraceEnd)) return;
@@ -36,6 +80,16 @@ void ASTULauncherWeapon::MakeShot()
 
     CanShoot = false;
     GetWorld()->GetTimerManager().SetTimer(ShootTimer, this, &ASTULauncherWeapon::ActivateShooting, FireRate, false);
+    UGameplayStatics::SpawnSoundAttached(FireSound, WeaponMesh, MuzzleSocketName);
+}
+
+void ASTULauncherWeapon::OnReloadEnd(USkeletalMeshComponent* MeshComp)
+{
+    if (const ACharacter* Character = GetPlayer())
+    {
+        if (Character->GetMesh() != MeshComp) return;
+        ReloadEndAudioComponent = UGameplayStatics::SpawnSoundAttached(ReloadEndSound, WeaponMesh);
+    }
 }
 
 void ASTULauncherWeapon::ActivateShooting()

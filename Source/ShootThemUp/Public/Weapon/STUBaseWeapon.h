@@ -33,6 +33,9 @@ public:
     bool IsMagazineEmpty() const;
     bool HasMagazines() const;
 
+    virtual void SetAnimNotifications(class UAnimMontage* ReloadAnimMontage);
+    virtual void StopReloadSounds();
+
 protected:
     UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
     class USkeletalMeshComponent* WeaponMesh;
@@ -58,6 +61,18 @@ protected:
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
     class UNiagaraSystem* MuzzleFX;
 
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Sound")
+    class USoundCue* ReloadStartSound;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Sound")
+    class USoundCue* FireSound;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Sound")
+    class USoundCue* NoAmmoSound;
+
+    UPROPERTY(BlueprintReadWrite, Category = "Sound")
+    class UAudioComponent* ReloadStartAudioComponent;
+
     virtual void BeginPlay() override;
 
     virtual void MakeShot();
@@ -82,6 +97,11 @@ protected:
 
     class UNiagaraComponent* SpawnMuzzleFX();
 
+    virtual void OnReloadStart(USkeletalMeshComponent* MeshComp);
+
 private:
     FAmmoData CurrentAmmo;
+
+    UPROPERTY()
+    class ACharacter* PlayerOwner;
 };

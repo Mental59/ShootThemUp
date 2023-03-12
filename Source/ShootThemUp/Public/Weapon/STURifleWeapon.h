@@ -16,6 +16,7 @@ public:
 
     virtual void StartFire() override;
     virtual void StopFire() override;
+    virtual void SetAnimNotifications(class UAnimMontage* ReloadAnimMontage) override;
 
 protected:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon", meta = (ClampMin = "0.0"))
@@ -36,6 +37,9 @@ protected:
     UPROPERTY(VisibleAnywhere, Category = "VFX")
     class USTUWeaponFXComponent* WeaponFXComponent;
 
+    UPROPERTY(BlueprintReadWrite, Category = "Sound")
+    class UAudioComponent* FireAudioComponent;
+    
     virtual void BeginPlay() override;
     virtual void MakeShot() override;
     virtual bool GetCameraTraceData(FVector& TraceStart, FVector& TraceEnd) const override;
@@ -48,8 +52,8 @@ private:
     class UNiagaraComponent* MuzzleFXComponent;
 
     void PlayImpactFX(const struct FHitResult& HitResult);
-    void InitMuzzleFX();
-    void SetMuzzleFXVisibility(bool Visibility);
+    void InitFX();
+    void SetFXActive(bool IsActive);
     void SpawnTraceFX(const FVector& TraceStart, const FVector& TraceEnd);
     void PlayAllFX(const struct FHitResult& HitResult);
 };
