@@ -5,6 +5,7 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "STUGameModeBase.h"
+#include "STUGameInstance.h"
 
 ASTUPlayerController::ASTUPlayerController()
 {
@@ -38,6 +39,7 @@ void ASTUPlayerController::SetupInputComponent()
     {
         if (PauseAction) PauseAction->bTriggerWhenPaused = true;
         EnhancedInputComponent->BindAction(PauseAction, ETriggerEvent::Triggered, this, &ASTUPlayerController::OnGamePause);
+        EnhancedInputComponent->BindAction(MuteAction, ETriggerEvent::Triggered, this, &ASTUPlayerController::OnMuteSound);
     }
 }
 
@@ -62,5 +64,15 @@ void ASTUPlayerController::OnMatchStateChanged(ESTUMatchState MatchState)
     {
         SetInputMode(FInputModeUIOnly());
         bShowMouseCursor = true;
+    }
+}
+
+void ASTUPlayerController::OnMuteSound()
+{
+    if (!GetWorld()) return;
+    
+    if (const USTUGameInstance* STUGameInstance = GetWorld()->GetGameInstance<USTUGameInstance>())
+    {
+        STUGameInstance->ToggleVolume();
     }
 }

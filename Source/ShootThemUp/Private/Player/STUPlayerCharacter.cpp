@@ -5,12 +5,13 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
-#include "InputMappingContext.h"
 #include "GameFramework/PlayerController.h"
 #include "Components/STUWeaponComponent.h"
 #include "InputActionValue.h"
 #include "Components/SphereComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "Sound/SoundCue.h"
 
 ASTUPlayerCharacter::ASTUPlayerCharacter(const FObjectInitializer& ObjInit) : Super(ObjInit)
 {
@@ -49,6 +50,7 @@ void ASTUPlayerCharacter::BeginPlay()
 
     CameraCollisionComponent->OnComponentBeginOverlap.AddDynamic(this, &ASTUPlayerCharacter::OnCameraCollisionBeginOverlap);
     CameraCollisionComponent->OnComponentEndOverlap.AddDynamic(this, &ASTUPlayerCharacter::OnCameraCollisionEndOverlap);
+    UGameplayStatics::PlaySound2D(this, RespawnSound);
 }
 
 void ASTUPlayerCharacter::OnCameraCollisionBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
@@ -86,6 +88,7 @@ void ASTUPlayerCharacter::OnDeath()
     if (Controller)
     {
         Controller->ChangeState(NAME_Spectating);
+        UGameplayStatics::PlaySound2D(this, DeathSound);
     }
 }
 

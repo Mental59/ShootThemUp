@@ -68,7 +68,7 @@ protected:
     bool IsMovingForward = false;
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Sound")
-    class USoundCue* DeathSound;
+    class USoundCue* BodyDropSound;
 
     virtual void BeginPlay() override;
 

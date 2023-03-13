@@ -1,7 +1,9 @@
 // Shoot Them Up Game, All Rights Reserved.
 
 #include "Pickups/STUBasePickup.h"
-#include <Components/SphereComponent.h>
+#include "Components/SphereComponent.h"
+#include "Sound/SoundCue.h"
+#include "Kismet/GameplayStatics.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogBasePickup, All, All);
 
@@ -53,6 +55,11 @@ bool ASTUBasePickup::GivePickupTo(APawn* PlayerPawn)
     return false;
 }
 
+void ASTUBasePickup::PlayPickupSound() const
+{
+    UGameplayStatics::PlaySoundAtLocation(GetWorld(), PickupSound, GetActorLocation());
+}
+
 void ASTUBasePickup::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
@@ -81,6 +88,7 @@ void ASTUBasePickup::PickupWasTaken()
         GetRootComponent()->SetVisibility(false, true);
     }
     CollisionComponent->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
+    PlayPickupSound();
 
     GetWorldTimerManager().SetTimer(RespawnTimerHandle, this, &ASTUBasePickup::Respawn, RespawnTime);
 }

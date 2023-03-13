@@ -139,7 +139,7 @@ void ASTUBaseCharacter::OnDeath()
     GetMesh()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
     GetMesh()->SetSimulatePhysics(true);
 
-    UGameplayStatics::PlaySoundAtLocation(GetWorld(), DeathSound, GetActorLocation());
+    UGameplayStatics::PlaySoundAtLocation(GetWorld(), BodyDropSound, GetActorLocation());
 }
 
 void ASTUBaseCharacter::OnHealthChanged(float Health, float HealthDelta) {}

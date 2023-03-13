@@ -50,6 +50,12 @@ protected:
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
     class UInputAction* ReloadAction;
 
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Sound")
+    class USoundCue* RespawnSound;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Sound")
+    class USoundCue* DeathSound;
+
     UFUNCTION()
     void OnCameraCollisionBeginOverlap(class UPrimitiveComponent* OverlappedComponent, class AActor* OtherActor,
         class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const struct FHitResult& SweepResult);

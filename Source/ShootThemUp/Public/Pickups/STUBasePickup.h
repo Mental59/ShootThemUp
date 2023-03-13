@@ -13,6 +13,8 @@ class SHOOTTHEMUP_API ASTUBasePickup : public AActor
 
 public:
     ASTUBasePickup();
+    virtual void Tick(float DeltaTime) override;
+    bool CouldBeTaken() const;
 
 protected:
     UPROPERTY(VisibleAnywhere, Category = "Pickup")
@@ -24,6 +26,9 @@ protected:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Pickup")
     float CollisionEnadleTime = 0.2f;
 
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Sound")
+    class USoundCue* PickupSound;
+
     virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
 
     virtual void NotifyActorEndOverlap(AActor* OtherActor) override;
@@ -32,13 +37,11 @@ protected:
 
     virtual bool GivePickupTo(APawn* PlayerPawn);
 
-public:
-    virtual void Tick(float DeltaTime) override;
-    bool CouldBeTaken() const;
+    void PlayPickupSound() const;
 
 private:
     UPROPERTY()
-    TArray<class APawn*> OverlappingPawns;
+    TArray<APawn*> OverlappingPawns;
 
     FTimerHandle RespawnTimerHandle;
     float RotationYaw = 0.0f;

@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
 #include "STUCoreTypes.h"
+#include "InputMappingContext.h"
 #include "STUPlayerController.generated.h"
 
 UCLASS()
@@ -25,6 +26,9 @@ protected:
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
     class UInputAction* PauseAction;
 
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+    class UInputAction* MuteAction;
+
     virtual void BeginPlay() override;
     virtual void SetupInputComponent() override;
 
@@ -33,4 +37,5 @@ private:
 
     void OnGamePause();
     void OnMatchStateChanged(ESTUMatchState MatchState);
+    void OnMuteSound();
 };

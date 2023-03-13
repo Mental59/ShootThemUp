@@ -3,7 +3,6 @@
 #include "Weapon/STUProjectile.h"
 #include <Components/SphereComponent.h>
 #include <GameFramework/ProjectileMovementComponent.h>
-#include <DrawDebugHelpers.h>
 #include <Kismet/GameplayStatics.h>
 #include "Weapon/Components/STUWeaponFXComponent.h"
 

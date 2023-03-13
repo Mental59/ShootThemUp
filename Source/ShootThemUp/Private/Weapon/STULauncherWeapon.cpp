@@ -2,7 +2,7 @@
 
 #include "Weapon/STULauncherWeapon.h"
 #include "Weapon/STUProjectile.h"
-#include <Kismet/GameplayStatics.h>
+#include "Kismet/GameplayStatics.h"
 #include "Sound/SoundCue.h"
 #include "Animations/AnimUtils.h"
 #include "Animations/STULauncherReloadStartAnimNotify.h"

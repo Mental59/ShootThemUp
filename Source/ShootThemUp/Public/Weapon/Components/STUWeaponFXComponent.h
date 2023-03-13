@@ -25,6 +25,7 @@ protected:
     TMap<class UPhysicalMaterial*, FImpactData> ImpactDataMap;
 
 private:
-    void SpawnNiagaraEffect(const struct FHitResult& HitResult, class UNiagaraSystem* NiagaraSystem);
-    void SpawnDecal(const struct FHitResult& HitResult, const FImpactData& ImpactData);
+    void SpawnNiagaraEffect(const FHitResult& HitResult, class UNiagaraSystem* NiagaraSystem) const;
+    void SpawnDecal(const FHitResult& HitResult, const FDecalData& ImpactData) const;
+    void PlayImpactSound(const FHitResult& HitResult, class USoundCue* ImpactSound) const;
 };
