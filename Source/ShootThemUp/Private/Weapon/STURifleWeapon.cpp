@@ -11,6 +11,8 @@
 #include "Components/AudioComponent.h"
 #include "Animations/STURifleReloadAnimNotify.h"
 
+DEFINE_LOG_CATEGORY_STATIC(LogRifleWeapon, All, All);
+
 ASTURifleWeapon::ASTURifleWeapon()
 {
     WeaponFXComponent = CreateDefaultSubobject<USTUWeaponFXComponent>("WeaponFXComponent");
@@ -82,6 +84,7 @@ void ASTURifleWeapon::SetAnimNotifications(UAnimMontage* ReloadAnimMontage)
     }
     else
     {
+        UE_LOG(LogRifleWeapon, Error, TEXT("Rifle reload anim notify is not set"));
         checkNoEntry();
     }
 }

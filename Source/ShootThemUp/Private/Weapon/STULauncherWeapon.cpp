@@ -10,6 +10,8 @@
 #include "Components/AudioComponent.h"
 #include "GameFramework/Character.h"
 
+DEFINE_LOG_CATEGORY_STATIC(LogLauncherWeapon, All, All);
+
 void ASTULauncherWeapon::StartFire()
 {
     if (CanShoot) MakeShot();
@@ -25,6 +27,7 @@ void ASTULauncherWeapon::SetAnimNotifications(UAnimMontage* ReloadAnimMontage)
     }
     else
     {
+        UE_LOG(LogLauncherWeapon, Error, TEXT("Laucnher reload start anim notify is not set"));
         checkNoEntry();
     }
 
@@ -34,6 +37,7 @@ void ASTULauncherWeapon::SetAnimNotifications(UAnimMontage* ReloadAnimMontage)
     }
     else
     {
+        UE_LOG(LogLauncherWeapon, Error, TEXT("Launcher reload end anim notify is not set"));
         checkNoEntry();
     }
 }
