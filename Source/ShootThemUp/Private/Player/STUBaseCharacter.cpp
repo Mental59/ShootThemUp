@@ -7,6 +7,7 @@
 #include "Components/STUHealthComponent.h"
 #include "Components/STUWeaponComponent.h"
 #include "Components/STUCharacterMovementComponent.h"
+#include "Engine/DamageEvents.h"
 #include "Kismet/GameplayStatics.h"
 #include "Sound/SoundCue.h"
 
@@ -152,5 +153,9 @@ void ASTUBaseCharacter::OnGroundLanded(const FHitResult& Hit)
     if (FallVelocityZ < LandedDamageVelocity.X) return;
 
     const double FinalDamage = FMath::GetMappedRangeValueClamped(LandedDamageVelocity, LandedDamage, FallVelocityZ);
-    TakeDamage(FinalDamage, FDamageEvent{}, nullptr, nullptr);
+    
+    FPointDamageEvent PointDamageEvent;
+    PointDamageEvent.Damage = FinalDamage;
+    
+    TakeDamage(FinalDamage, PointDamageEvent, nullptr, nullptr);
 }

@@ -10,6 +10,7 @@
 #include "Sound/SoundCue.h"
 #include "Components/AudioComponent.h"
 #include "Animations/STURifleReloadAnimNotify.h"
+#include "Engine/DamageEvents.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogRifleWeapon, All, All);
 
@@ -119,7 +120,12 @@ void ASTURifleWeapon::MakeDamageToActor(const FHitResult& HitResult)
         AActor* DamagedActor = HitResult.GetActor();
         ACharacter* Player = GetPlayer();
         if (!DamagedActor || !Player) return;
-        DamagedActor->TakeDamage(DamageAmount, FDamageEvent(), Player->GetController(), this);
+
+        FPointDamageEvent PointDamageEvent;
+        PointDamageEvent.HitInfo = HitResult;
+        PointDamageEvent.Damage = DamageAmount;
+        
+        DamagedActor->TakeDamage(DamageAmount, PointDamageEvent, Player->GetController(), this);
     }
 }
 

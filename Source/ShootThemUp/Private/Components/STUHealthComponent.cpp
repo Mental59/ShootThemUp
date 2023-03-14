@@ -1,15 +1,14 @@
 // Shoot Them Up Game, All Rights Reserved.
 
 #include "Components/STUHealthComponent.h"
-#include "GameFramework/Actor.h"
-#include "GameFramework/Pawn.h"
+#include "GameFramework/Character.h"
 #include "GameFramework/Controller.h"
 #include "Engine/World.h"
 #include "TimerManager.h"
-#include "Camera/CameraShakeBase.h"
 #include "STUUtils.h"
 #include "Perception/AISense_Damage.h"
 #include "STUGameModeBase.h"
+#include "PhysicalMaterials/PhysicalMaterial.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogHealthComponent, All, All);
 
@@ -47,35 +46,27 @@ void USTUHealthComponent::BeginPlay()
     if (AActor* ComponentOwner = GetOwner())
     {
         ComponentOwner->OnTakeAnyDamage.AddDynamic(this, &USTUHealthComponent::OnTakeAnyDamage);
+        ComponentOwner->OnTakePointDamage.AddDynamic(this, &USTUHealthComponent::OnTakePointDamage);
+        ComponentOwner->OnTakeRadialDamage.AddDynamic(this, &USTUHealthComponent::OnTakeRadialDamage);
     }
 }
 
 void USTUHealthComponent::OnTakeAnyDamage(
     AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser)
 {
-    if (Damage <= 0.0f || IsDead()) return;
+    
+}
 
-    if (const APawn* DamagedPawn = Cast<APawn>(DamagedActor))
-    {
-        if (!STUUtils::AreEnemies(DamagedPawn->GetController(), InstigatedBy)) return;
-    }
+void USTUHealthComponent::OnTakePointDamage(AActor* DamagedActor, float Damage, AController* InstigatedBy, FVector HitLocation,
+    UPrimitiveComponent* FHitComponent, FName BoneName, FVector ShotFromDirection, const UDamageType* DamageType, AActor* DamageCauser)
+{
+    ApplyDamage(Damage * GetPointDamageModifier(DamagedActor, BoneName), InstigatedBy);
+}
 
-    SetHealth(Health - Damage);
-
-    ClearAutoHealTimer();
-
-    if (IsDead())
-    {
-        KilledBy(InstigatedBy);
-        OnDeath.Broadcast();
-    }
-    else if (AutoHeal)
-    {
-        SetAutoHealTimer();
-    }
-
-    PlayCameraShake();
-    ReportDamageEvent(Damage, InstigatedBy);
+void USTUHealthComponent::OnTakeRadialDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, FVector Origin,
+    FHitResult HitInfo, AController* InstigatedBy, AActor* DamageCauser)
+{
+    ApplyDamage(Damage, InstigatedBy);
 }
 
 void USTUHealthComponent::OnAutoHealTimerFired()
@@ -142,4 +133,56 @@ void USTUHealthComponent::KilledBy(AController* KillerController)
         AController* VictimController = PlayerPawn ? PlayerPawn->Controller : nullptr;
         GameMode->Killed(KillerController, VictimController);
     }
+}
+
+void USTUHealthComponent::ApplyDamage(float Damage, AController* InstigatedBy)
+{
+    if (Damage <= 0.0f || IsDead()) return;
+
+    if (const APawn* DamagedPawn = Cast<APawn>(GetOwner()))
+    {
+        if (!STUUtils::AreEnemies(DamagedPawn->GetController(), InstigatedBy)) return;
+    }
+
+    SetHealth(Health - Damage);
+
+    ClearAutoHealTimer();
+
+    if (IsDead())
+    {
+        KilledBy(InstigatedBy);
+        OnDeath.Broadcast();
+    }
+    else if (AutoHeal)
+    {
+        SetAutoHealTimer();
+    }
+
+    PlayCameraShake();
+    ReportDamageEvent(Damage, InstigatedBy);
+}
+
+float USTUHealthComponent::GetPointDamageModifier(AActor* DamagedActor, const FName& BoneName) const
+{
+    if (const ACharacter* Character = Cast<ACharacter>(DamagedActor))
+    {
+        const UPhysicalMaterial* PhysicalMaterial = GetPhysicalMaterial(Character, BoneName);
+        if (PhysicalMaterial && DamageModifiers.Contains(PhysicalMaterial))
+        {
+            return DamageModifiers[PhysicalMaterial];
+        }
+    }
+    return 1.0f;
+}
+
+UPhysicalMaterial* USTUHealthComponent::GetPhysicalMaterial(const ACharacter* Character, const FName& BoneName) const
+{
+    if (const USkeletalMeshComponent* MeshComp = Character->GetMesh())
+    {
+        if (const FBodyInstance* BodyInstance = MeshComp->GetBodyInstance(BoneName))
+        {
+            return BodyInstance->GetSimplePhysicalMaterial();
+        }
+    }
+    return nullptr;
 }
