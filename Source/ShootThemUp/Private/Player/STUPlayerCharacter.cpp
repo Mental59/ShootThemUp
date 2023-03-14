@@ -38,6 +38,8 @@ void ASTUPlayerCharacter::BeginPlay()
     Super::BeginPlay();
 
     check(CameraCollisionComponent);
+    check(CameraComponent);
+    check(SpringArmComponent);
 
     if (const APlayerController* PlayerController = Cast<APlayerController>(Controller))
     {
@@ -85,6 +87,8 @@ void ASTUPlayerCharacter::CheckCameraOverlap()
 void ASTUPlayerCharacter::OnDeath()
 {
     Super::OnDeath();
+
+    WeaponComponent->Zoom(false);
     if (Controller)
     {
         Controller->ChangeState(NAME_Spectating);
@@ -116,6 +120,9 @@ void ASTUPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInput
         EnhancedInputComponent->BindAction(NextWeaponAction, ETriggerEvent::Triggered, WeaponComponent, &USTUWeaponComponent::NextWeapon);
 
         EnhancedInputComponent->BindAction(ReloadAction, ETriggerEvent::Triggered, WeaponComponent, &USTUWeaponComponent::ReloadWeapon);
+        
+        EnhancedInputComponent->BindAction(ZoomAction, ETriggerEvent::Started, WeaponComponent, &USTUWeaponComponent::Zoom, true);
+        EnhancedInputComponent->BindAction(ZoomAction, ETriggerEvent::Completed, WeaponComponent, &USTUWeaponComponent::Zoom, false);
     }
 }
 

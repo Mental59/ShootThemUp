@@ -36,6 +36,12 @@ void ASTURifleWeapon::BeginPlay()
     Super::BeginPlay();
 
     check(WeaponFXComponent);
+
+    const APlayerController* Controller = GetPlayerController();
+    if (Controller && Controller->PlayerCameraManager)
+    {
+        DefaultCameraFOV = Controller->PlayerCameraManager->GetFOVAngle();
+    }
 }
 
 void ASTURifleWeapon::MakeShot()
@@ -62,6 +68,12 @@ void ASTURifleWeapon::PlayAllFX(const FHitResult& HitResult)
     SpawnTraceFX(GetMuzzleWorldLocation(), HitResult.bBlockingHit ? HitResult.ImpactPoint : HitResult.TraceEnd);
 }
 
+APlayerController* ASTURifleWeapon::GetPlayerController() const
+{
+    APawn* Pawn = Cast<APawn>(GetOwner());
+    return Pawn ? Pawn->GetController<APlayerController>() : nullptr;
+}
+
 bool ASTURifleWeapon::GetCameraTraceData(FVector& TraceStart, FVector& TraceEnd) const
 {
     FVector ViewLocation;
@@ -86,6 +98,15 @@ void ASTURifleWeapon::SetAnimNotifications(UAnimMontage* ReloadAnimMontage)
     {
         UE_LOG(LogRifleWeapon, Error, TEXT("Rifle reload anim notify is not set"));
         checkNoEntry();
+    }
+}
+
+void ASTURifleWeapon::Zoom(bool Enabled)
+{
+    const APlayerController* Controller = GetPlayerController();
+    if (Controller && Controller->PlayerCameraManager)
+    {
+        Controller->PlayerCameraManager->SetFOV(Enabled ? FOVZoomAngle : DefaultCameraFOV);
     }
 }
 

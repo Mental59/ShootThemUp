@@ -28,6 +28,7 @@ public:
     bool IsOutOfAmmo() const;
     bool CanFire() const;
     bool CanEquip() const;
+    void Zoom(bool Enabled);
 
 protected:
     UPROPERTY(EditDefaultsOnly, Category = "Weapon")

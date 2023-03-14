@@ -125,6 +125,18 @@ void ASTUBaseWeapon::StopReloadSounds()
     }
 }
 
+void ASTUBaseWeapon::Zoom(bool Enabled)
+{
+    
+}
+
+void ASTUBaseWeapon::Unequip()
+{
+    StopReloadSounds();
+    StopFire();
+    Zoom(false);
+}
+
 ACharacter* ASTUBaseWeapon::GetPlayer() const
 {
     return PlayerOwner;

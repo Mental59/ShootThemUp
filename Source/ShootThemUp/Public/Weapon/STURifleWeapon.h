@@ -17,6 +17,7 @@ public:
     virtual void StartFire() override;
     virtual void StopFire() override;
     virtual void SetAnimNotifications(class UAnimMontage* ReloadAnimMontage) override;
+    virtual void Zoom(bool Enabled) override;
 
 protected:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon", meta = (ClampMin = "0.0"))
@@ -27,6 +28,9 @@ protected:
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon", meta = (ClampMin = "0.0"))
     float DamageAmount = 10.0f;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon", meta = (ClampMin = "0.0"))
+    float FOVZoomAngle = 50.0f;
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "FX")
     class UNiagaraSystem* TraceFX;
@@ -47,6 +51,7 @@ protected:
 
 private:
     FTimerHandle ShootTimerHandle;
+    float DefaultCameraFOV;
 
     UPROPERTY()
     class UNiagaraComponent* MuzzleFXComponent;
@@ -56,4 +61,5 @@ private:
     void SetFXActive(bool IsActive);
     void SpawnTraceFX(const FVector& TraceStart, const FVector& TraceEnd);
     void PlayAllFX(const struct FHitResult& HitResult);
+    class APlayerController* GetPlayerController() const;
 };

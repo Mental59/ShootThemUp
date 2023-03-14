@@ -46,6 +46,7 @@ void ASTUBaseCharacter::BeginPlay()
     check(GetCharacterMovement());
     check(GetCapsuleComponent());
     check(GetMesh());
+    check(WeaponComponent);
 
     OnHealthChanged(HealthComponent->GetHealth(), 0.0f);
     HealthComponent->OnDeath.AddUObject(this, &ASTUBaseCharacter::OnDeath);

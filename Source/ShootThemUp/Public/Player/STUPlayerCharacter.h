@@ -50,6 +50,9 @@ protected:
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
     class UInputAction* ReloadAction;
 
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+    class UInputAction* ZoomAction;
+
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Sound")
     class USoundCue* RespawnSound;
 

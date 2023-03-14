@@ -20,11 +20,7 @@ public:
     virtual void StartFire();
     virtual void StopFire();
 
-    void ChangeMagazine();
-    bool CanReload() const;
-
     const FWeaponUIData& GetUIData() const;
-
     const FAmmoData& GetAmmoData() const;
 
     bool TryToAddAmmo(int32 MagazinesAmount);
@@ -32,9 +28,13 @@ public:
     bool IsAmmoFull() const;
     bool IsMagazineEmpty() const;
     bool HasMagazines() const;
+    bool CanReload() const;
 
+    void ChangeMagazine();
     virtual void SetAnimNotifications(class UAnimMontage* ReloadAnimMontage);
     virtual void StopReloadSounds();
+    virtual void Zoom(bool Enabled);
+    virtual void Unequip();
 
 protected:
     UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")

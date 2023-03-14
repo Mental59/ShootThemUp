@@ -91,7 +91,7 @@ void USTUWeaponComponent::EquipWeapon(int32 WeaponIndex)
 
     if (CurrentWeapon)
     {
-        CurrentWeapon->StopFire();
+        CurrentWeapon->Unequip();
         AttachWeaponToSocket(CurrentWeapon, Character->GetMesh(), WeaponArmorySocketName);
     }
 
@@ -186,7 +186,6 @@ void USTUWeaponComponent::StopFire()
 void USTUWeaponComponent::NextWeapon()
 {
     if (!CanEquip()) return;
-    if (CurrentWeapon) CurrentWeapon->StopReloadSounds();
     CurrentWeaponIndex = (CurrentWeaponIndex + 1) % Weapons.Num();
     EquipWeapon(CurrentWeaponIndex);
 }
@@ -276,6 +275,11 @@ bool USTUWeaponComponent::CanFire() const
 bool USTUWeaponComponent::CanEquip() const
 {
     return !EqiupAnimInProgress;
+}
+
+void USTUWeaponComponent::Zoom(bool Enabled)
+{
+    if (CurrentWeapon) CurrentWeapon->Zoom(Enabled);
 }
 
 bool USTUWeaponComponent::CanReload() const
