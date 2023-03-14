@@ -48,6 +48,7 @@ protected:
     class UAudioComponent* FireAudioComponent;
     
     virtual void BeginPlay() override;
+    virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
     virtual void MakeShot() override;
     virtual bool GetCameraTraceData(FVector& TraceStart, FVector& TraceEnd) const override;
     void MakeDamageToActor(const struct FHitResult& HitResult);

@@ -32,7 +32,6 @@ ASTUBaseCharacter::ASTUBaseCharacter(const FObjectInitializer& ObjInit)
 
 void ASTUBaseCharacter::SetPlayerColor(const FLinearColor& PlayerColor)
 {
-
     if (UMaterialInstanceDynamic* MaterialInstance = GetMesh()->CreateAndSetMaterialInstanceDynamic(0))
     {
         MaterialInstance->SetVectorParameterValue(MaterialColorName, PlayerColor);

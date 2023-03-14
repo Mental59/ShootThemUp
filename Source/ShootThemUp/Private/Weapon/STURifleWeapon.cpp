@@ -46,6 +46,12 @@ void ASTURifleWeapon::BeginPlay()
     CurrentFireSpread = DefaultFireSpread;
 }
 
+void ASTURifleWeapon::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+    Super::EndPlay(EndPlayReason);
+    if (FireAudioComponent) FireAudioComponent->Stop();
+}
+
 void ASTURifleWeapon::MakeShot()
 {
     FVector CameraTraceStart, CameraTraceEnd;
