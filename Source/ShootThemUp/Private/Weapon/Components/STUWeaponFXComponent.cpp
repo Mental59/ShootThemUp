@@ -42,9 +42,10 @@ void USTUWeaponFXComponent::SpawnDecal(const FHitResult& HitResult, const FDecal
         DecalData.Size,  
         HitResult.ImpactPoint,
         HitResult.ImpactNormal.Rotation());
-
+    
     if (DecalComponent)
     {
+        DecalComponent->SetFadeScreenSize(0.0f);
         DecalComponent->SetFadeOut(DecalData.LifeTime, DecalData.FadeOutTime);
     }
 }

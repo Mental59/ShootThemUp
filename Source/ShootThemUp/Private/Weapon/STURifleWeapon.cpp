@@ -42,6 +42,7 @@ void ASTURifleWeapon::BeginPlay()
     {
         DefaultCameraFOV = Controller->PlayerCameraManager->GetFOVAngle();
     }
+    CurrentFireSpread = DefaultFireSpread;
 }
 
 void ASTURifleWeapon::MakeShot()
@@ -81,7 +82,7 @@ bool ASTURifleWeapon::GetCameraTraceData(FVector& TraceStart, FVector& TraceEnd)
     if (!GetPlayerViewPoint(ViewLocation, ViewRotation)) return false;
 
     TraceStart = ViewLocation;
-    const FVector ShootDirection = FMath::VRandCone(ViewRotation.Vector(), FMath::DegreesToRadians(FireSpread));
+    const FVector ShootDirection = FMath::VRandCone(ViewRotation.Vector(), FMath::DegreesToRadians(CurrentFireSpread));
     TraceEnd = TraceStart + ShootDirection * TraceMaxDistance;
 
     return true;
@@ -107,6 +108,7 @@ void ASTURifleWeapon::Zoom(bool Enabled)
     if (Controller && Controller->PlayerCameraManager)
     {
         Controller->PlayerCameraManager->SetFOV(Enabled ? FOVZoomAngle : DefaultCameraFOV);
+        CurrentFireSpread = Enabled ? ZoomFireSpread : DefaultFireSpread;
     }
 }
 

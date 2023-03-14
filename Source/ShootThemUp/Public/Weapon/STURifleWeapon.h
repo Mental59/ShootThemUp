@@ -24,7 +24,10 @@ protected:
     float FireRate = 0.1f;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon", meta = (ClampMin = "0.0"))
-    float FireSpread = 1.5f;
+    float DefaultFireSpread = 1.5f;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon", meta = (ClampMin = "0.0"))
+    float ZoomFireSpread = 1.0f;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon", meta = (ClampMin = "0.0"))
     float DamageAmount = 10.0f;
@@ -52,6 +55,7 @@ protected:
 private:
     FTimerHandle ShootTimerHandle;
     float DefaultCameraFOV;
+    float CurrentFireSpread;
 
     UPROPERTY()
     class UNiagaraComponent* MuzzleFXComponent;
